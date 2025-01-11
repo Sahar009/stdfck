@@ -1,0 +1,23 @@
+.blue-button {
+    background-color: #016696;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    transition: background-color 0.3s ease;
+  }
+  
+  .blue-button:hover {
+    background-color: #015580;
+    color: white;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .col-md-4 {
+      margin-bottom: 20px;
+    }
+    
+    .col-md-4:last-child {
+      padding-right: 5%;
+    }
+  }

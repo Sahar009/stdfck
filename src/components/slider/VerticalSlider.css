@@ -1,0 +1,55 @@
+.bullet-navigator {
+  position: absolute;
+  display: block;
+  top: 83.6754px;
+  right: 8.71759px;
+  width: 9.69746px;
+  height: 80.8122px;
+}
+
+.bullet {
+  width: 12px;
+  height: 12px;
+  padding: 0;
+  margin: 10px 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.bullet svg {
+  width: 100%;
+  height: 100%;
+}
+
+.bullet circle {
+  fill: #fff;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+.bullet.active circle {
+  opacity: 1;
+}
+
+.slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Animation for slide transitions */
+@keyframes slideVertical {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.slide.active {
+  animation: slideVertical 0.5s ease-in-out;
+} 
