@@ -2,13 +2,13 @@
 
 body{
   /* overflow: hidden; */
-  height: 100%;
+  /* height: 100%;
   width: 100%;
   visibility: visible;
   display: block;
   inset: 0px auto auto 0px;
   margin: 0px;
-  opacity: 1 !important;
+  opacity: 1 !important; */
 }
 :root{
   --primary-color: #007bff;
@@ -46,6 +46,15 @@ body{
   height: 600px !important;
   max-width: 380px !important;
   width: 380px !important;
+}
+.red-button-solid {
+  background-color: #DC1431;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.red-button-solid:hover {
+  background-color: #b01029;
 }
 
 /* For mobile devices */

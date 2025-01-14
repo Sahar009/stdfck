@@ -42,77 +42,70 @@ const VerticalSlider = () => {
         margin: '0 auto',
         top: 0,
         left: 0,
-        width: '640px',
-        height: '248.163px',
-        overflow: 'hidden',
-        visibility: 'visible'
+        width: '100%',
+        height: '400px',
+        overflow: 'hidden'
       }}
     >
       <div 
         className="slides-container"
         style={{
-          position: 'absolute',
-          display: 'block',
-          top: 0,
-          left: 0,
-          width: '640px',
-          height: '248.163px'
+          position: 'relative',
+          width: '100%',
+          height: '100%'
         }}
       >
+        {slides.map((slide, index) => (
+          <div
+            key={slide.id}
+            className="slide"
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              opacity: currentSlide === index ? 1 : 0,
+              transition: 'opacity 0.5s ease-in-out'
+            }}
+          >
+            <img
+              src={slide.image}
+              alt={`Slide ${slide.id}`}
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'fill',
+                display: 'block'
+              }}
+            />
+          </div>
+        ))}
+
+        {/* Bullet Navigator */}
         <div 
-          className="slides-wrapper"
+          className="bullet-navigator"
           style={{
             position: 'absolute',
-            display: 'block',
-            top: '-65.9184px',
-            left: '-170px',
-            width: '980px',
-            height: '380px',
-            transform: 'scale(0.653714)'
+            right: '10px',
+            top: '50%',
+            transform: 'translateY(-50%)',
+            zIndex: 1
           }}
         >
-          {slides.map((slide, index) => (
-            <div
-              key={slide.id}
-              className="slide"
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '980px',
-                height: '380px',
-                opacity: currentSlide === index ? 1 : 0,
-                transition: 'opacity 0.5s ease-in-out'
-              }}
+          {slides.map((_, index) => (
+            <button
+              key={index}
+              className={`bullet ${currentSlide === index ? 'active' : ''}`}
+              onClick={() => handleBulletClick(index)}
+              aria-label={`Go to slide ${index + 1}`}
             >
-              <img
-                src={slide.image}
-                alt={`Slide ${slide.id}`}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover'
-                }}
-              />
-            </div>
+              <svg viewBox="0 0 16000 16000">
+                <circle className="b" cx="8000" cy="8000" r="5800" />
+              </svg>
+            </button>
           ))}
         </div>
-      </div>
-
-      {/* Bullet Navigator */}
-      <div className="bullet-navigator">
-        {slides.map((_, index) => (
-          <button
-            key={index}
-            className={`bullet ${currentSlide === index ? 'active' : ''}`}
-            onClick={() => handleBulletClick(index)}
-            aria-label={`Go to slide ${index + 1}`}
-          >
-            <svg viewBox="0 0 16000 16000">
-              <circle className="b" cx="8000" cy="8000" r="5800" />
-            </svg>
-          </button>
-        ))}
       </div>
     </div>
   );

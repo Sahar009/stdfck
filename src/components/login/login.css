@@ -23,3 +23,9 @@
   .form-control {
     margin-bottom: 8px;
   }
+  .find a{
+    color: #fff;
+    text-decoration: none;
+    font-size: 12px;
+    text-align: center;
+  }

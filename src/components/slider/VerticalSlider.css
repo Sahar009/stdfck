@@ -1,20 +1,23 @@
 .bullet-navigator {
-  position: absolute;
-  display: block;
-  top: 83.6754px;
-  right: 8.71759px;
-  width: 9.69746px;
-  height: 80.8122px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
 }
 
 .bullet {
   width: 12px;
   height: 12px;
   padding: 0;
-  margin: 10px 0;
   border: none;
   background: none;
   cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.bullet.active {
+  opacity: 1;
 }
 
 .bullet svg {
@@ -24,12 +27,6 @@
 
 .bullet circle {
   fill: #fff;
-  opacity: 0.5;
-  transition: opacity 0.3s ease;
-}
-
-.bullet.active circle {
-  opacity: 1;
 }
 
 .slide {

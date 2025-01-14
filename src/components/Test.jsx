@@ -8,6 +8,7 @@ const Test = () => {
         <img src={build} alt="build image" style={{
             display: 'block',
             margin: '0 auto',
+            width:'100%'
           }}/>
           <p>Developed by Sahar009</p>
     </div>

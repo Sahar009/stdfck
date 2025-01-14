@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './login.css';
+import { FaLocationDot } from "react-icons/fa6";
+
 const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
@@ -131,6 +133,33 @@ const Login = () => {
           Online Enrollment
         </Link>
       </div>
+      <div>
+  <div 
+    style={{
+      backgroundColor: '#0073CF',
+      color: '#fff',
+      padding: '3% 3% 3% 8%',
+      margin:"20px 0",
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+   
+    }}
+  >
+    {/* <span style={{ float: 'left' }}>
+      
+    </span> */}
+    <div  className='find'>
+      <a 
+        href="#"
+        onClick={(e) => e.preventDefault()}
+
+      >
+       <FaLocationDot  /> Find your nearest ATM/SERVICE CENTERS
+      </a>
+    </div>
+  </div>
+</div>
     </div>
   );
 };

@@ -1,0 +1,39 @@
+.blood-button-solid {
+  background-color: #6a3433;
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+  display: inline-block;
+  transition: background-color 0.3s ease;
+}
+
+.blood-button-solid:hover {
+  background-color: #542a29;
+  color: white;
+  text-decoration: none;
+}
+
+.red-button-solid {
+  background-color: #DC1431;
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+  display: inline-block;
+  transition: background-color 0.3s ease;
+}
+
+.red-button-solid:hover {
+  background-color: #b01029;
+  color: white;
+  text-decoration: none;
+}
+
+#info-div {
+  margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  #info-div {
+    text-align: center;
+  }
+} 
