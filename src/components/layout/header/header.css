@@ -1,9 +1,9 @@
 .main-header {
-  position: fixed;
+  /* position: fixed;
   top: 0;
-  left: 0;
+  left: 0; */
   width: 100%;
-  background: #06310433;
+  background: #000000e6;
   background-size: cover;
   background-position: center;
   box-shadow: 0 2px 8px rgba(161, 234, 89, 0.1);
@@ -80,10 +80,22 @@
   cursor: pointer;
 }
 
+.login-btn a{
+  text-decoration: none;
+  color: #4dbf14;
+}
+
 .login-btn {
   background: transparent;
   border: 1px solid #4dbf14;
   color: #4dbf14;
+  transition: 1s ease;
+}
+
+.login-btn:hover{
+  border-color: #c01e4e;
+  color: #fff;
+
 }
 
 .signup-btn {

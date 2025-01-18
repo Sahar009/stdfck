@@ -37,7 +37,7 @@ const Header = () => {
           </nav>
 
           <div className="header-actions">
-            <button className="login-btn">Login</button>
+            <button className="login-btn"><Link to="/login">Login</Link></button>
             {/* <button className="signup-btn">Sign Up</button> */}
             <button 
               className="mobile-menu-btn"

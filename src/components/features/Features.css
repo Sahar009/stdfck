@@ -6,7 +6,7 @@
   .features h2 {
     text-align: center;
     font-size: 2.5rem;
-    color: #333;
+  
     margin-bottom: 3rem;
   }
   
@@ -21,13 +21,41 @@
     padding: 2rem;
     background: #fff;
     border-radius: 8px;
-    box-shadow: 0 2px 15px rgba(0,0,0,0.08);
-    transition: transform 0.3s;
+    box-shadow: 0 2px 15px rgb(0, 251, 13);
+    transition: background-color 0.3s ease, transform 0.3s ease; 
+    position: relative;
+    overflow: hidden;
     text-align: center;
+    color: #333;
   }
   
   .feature-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-10px); 
+    background-color: #c01e4e;
+    color: #fff;
+  
+  }
+
+  .feature-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0; 
+    left: 0;
+    right: 0;
+    height: 98%; 
+    background-color: #c01e4e; 
+    transform: translateY(100%);
+    transition: transform 0.3s ease; 
+    z-index: 0; 
+   
+  }
+  .feature-card:hover::before {
+    transform: translateY(0); 
+  }
+  
+  .feature-icon, h3, p {
+    position: relative; 
+    z-index: 1;
   }
   
   .feature-icon {
@@ -37,14 +65,47 @@
   
   .feature-card h3 {
     font-size: 1.5rem;
-    color: #333;
+   
     margin-bottom: 1rem;
   }
   
   .feature-card p {
-    color: #666;
+  
     line-height: 1.6;
   }
+  .resources {
+    position: relative;
+    overflow-x: hidden;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+  }
+  
+  /* Hide scrollbar */
+  .resources ::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .resources {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  /* Smooth transitions */
+  .transition-transform {
+    transition-property: transform;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 500ms;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+  
+  }
+
   
   @media (max-width: 768px) {
     .features {
@@ -53,5 +114,12 @@
   
     .features h2 {
       font-size: 2rem;
+    }
+      .container {
+      padding: 0 1rem;
+    }
+    
+    button.absolute {
+      display: none;
     }
   }

@@ -2,16 +2,18 @@ import ContactForm from "../components/contact/ContactForm"
 import Events from "../components/events/Events"
 import Features from "../components/features/Features"
 import Hero from "../components/hero/Hero"
+import SvgMap from "../components/map/SvgMap"
 import Resources from "../components/resource/Resources"
 
 const Home = () => {
   return (
     <div>
         <Hero/>
-        {/* <Features/>
+        <Features/>
         <Resources/>
+       < SvgMap/>
         <Events/>
-        <ContactForm/> */}
+        <ContactForm/>
     </div>
   )
 }

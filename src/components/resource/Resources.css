@@ -1,6 +1,8 @@
 .resources {
     padding: 80px 0;
     background: #f8f9fa;
+    position: relative;
+    overflow-x: hidden;
   }
   
   .resources h2 {
@@ -54,6 +56,8 @@
     overflow: hidden;
     box-shadow: 0 2px 15px rgba(0,0,0,0.08);
     transition: transform 0.3s;
+        animation: slideIn 0.3s ease-out;
+
   }
   
   .resource-card:hover {
@@ -62,7 +66,7 @@
   
   .resource-card img {
     width: 100%;
-    height: 180px;
+    height: 200px;
     object-fit: cover;
   }
   
@@ -256,3 +260,15 @@
     border-radius: 2px;
     transition: width 0.3s ease;
   }
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateX(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
