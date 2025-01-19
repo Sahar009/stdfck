@@ -1,4 +1,4 @@
-import './features.css';
+import './Features.css';
 import { CiBank } from "react-icons/ci";
 import { FaHandsHelping } from 'react-icons/fa';
 import { FaMoneyCheckDollar } from "react-icons/fa6";
