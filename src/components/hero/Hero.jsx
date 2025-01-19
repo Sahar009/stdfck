@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import './Hero.css';
+import './hero.css';
 import backgroundImage from '../../assets/67240.jpg'; 
 import { CiBank } from "react-icons/ci";
 import { useEffect, useState } from 'react';

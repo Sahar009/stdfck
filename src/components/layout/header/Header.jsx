@@ -16,7 +16,7 @@ const Header = () => {
   ];
 
   return (
-    <header className="main-header" >
+    <section className="main-header" >
       <div className="container">
         <div className="header-content">
           <Link to="/" className="logo">
@@ -46,7 +46,7 @@ const Header = () => {
           </div>
         </div>
       </div>
-    </header>
+    </section>
   );
 };
 

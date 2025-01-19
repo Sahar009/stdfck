@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
 import 'swiper/swiper-bundle.css'; 
-import './Resources.css';
+import './resources.css';
 import image1 from '../../assets/acct.jpg'
 import image2 from '../../assets/acct2.jpg'
 import image3 from '../../assets/acct3.jpg'

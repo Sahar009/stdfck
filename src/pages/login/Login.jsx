@@ -1,7 +1,5 @@
-import React, { useState } from 'react';
 import './login.css';
-import backgroundImage from '../../assets/67240.jpg'; 
-
+import { useState } from 'react';
 function Login() {
   const [password, setPassword] = useState('');
   const [userId, setUserId] = useState('');
