@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Header.css';
-import backgroundImage from '../../../assets/67240.jpg';
 import { CiBank } from "react-icons/ci";
 
 const Header = () => {
@@ -12,7 +11,6 @@ const Header = () => {
     { path: '/about', label: 'About' },
     { path: '/funds', label: 'Fund Management' },
     { path: '/businesses', label: 'Businesses & Institutions' },
-    { path: '/contact', label: 'Contact Us' },
     { path: '/help', label: 'Help Desk' },
     { path: '/contact', label: 'Contact' }
   ];
