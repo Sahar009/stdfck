@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import './Header.css';
+import './header.css';
 import { CiBank } from "react-icons/ci";
 
 const Header = () => {
