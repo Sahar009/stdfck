@@ -1,0 +1,52 @@
+/* Inherit styles from login.css */
+.register-container {
+  /* position: relative; */
+  width: 100%;
+  height: auto;
+  max-width: 48rem; /* Wider than login container */
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  z-index: 2;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.form-group select {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.375rem;
+  font-size: 1rem;
+}
+
+.register-link {
+  color: #4dbf14;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.register-link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .register-container {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+} 

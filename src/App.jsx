@@ -9,6 +9,8 @@ import 'aos/dist/aos.css';
 import { useEffect } from 'react';
 import Login from './pages/login/Login';
 import Footer from './components/layout/footer/Footer';
+import Register from './pages/register/Register';
+import Dashboard from './pages/dashboard/Dashboard';
 
 function App() {
   useEffect(() => {
@@ -24,6 +26,9 @@ function App() {
  <Routes>
    <Route path="/" element={<Home />} />
    <Route path="/login" element={<Login/>} />
+   <Route path="/register" element={<Register/>} />
+   <Route path="/dashboard" element={<Dashboard/>} />
+   
    {/* Add more routes as needed */}
  </Routes>
 </main>
