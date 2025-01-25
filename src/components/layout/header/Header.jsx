@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './header.css';
 import { CiBank } from "react-icons/ci";
+import { FaBars } from "react-icons/fa";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -9,10 +10,10 @@ const Header = () => {
   const navItems = [
     { path: '/', label: 'Home' },
     { path: '/about', label: 'About' },
-    { path: '/funds', label: 'Fund Management' },
-    { path: '/businesses', label: 'Businesses & Institutions' },
-    { path: '/help', label: 'Help Desk' },
-    { path: '/contact', label: 'Contact' }
+    // { path: '/funds', label: 'Fund Management' },
+    { path: '/business', label: 'Businesses & Institutions' },
+    { path: '/contact', label: 'Help Desk' },
+    // { path: '/contact', label: 'Contact' }
   ];
 
   return (
@@ -41,7 +42,7 @@ const Header = () => {
               className="mobile-menu-btn"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
-              <span></span>
+              <FaBars size={20} color='#4dbf14'/>
             </button>
           </div>
         </div>

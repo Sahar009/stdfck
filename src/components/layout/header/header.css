@@ -119,9 +119,12 @@
     top: 80px;
     left: 0;
     width: 100%;
-    background: #fff;
+    background: #151515;
+    color: #4dbf14;
     padding: 20px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: 0.8s ease;
+ 
   }
 
   .main-nav.active ul {
