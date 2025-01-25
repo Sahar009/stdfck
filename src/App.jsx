@@ -11,6 +11,7 @@ import Login from './pages/login/Login';
 import Footer from './components/layout/footer/Footer';
 import Register from './pages/register/Register';
 import Dashboard from './pages/dashboard/Dashboard';
+import Transfer from './pages/transfer/Transfer';
 
 function App() {
   useEffect(() => {
@@ -28,6 +29,7 @@ function App() {
    <Route path="/login" element={<Login/>} />
    <Route path="/register" element={<Register/>} />
    <Route path="/dashboard" element={<Dashboard/>} />
+   <Route path="/transfer" element={<Transfer/>} />
    
    {/* Add more routes as needed */}
  </Routes>
