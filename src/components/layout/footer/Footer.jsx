@@ -27,17 +27,17 @@ function Footer() {
         <div className="footer-column">
           <h3>Company</h3>
           <ul>
-            <li><a href="/affiliate">Affiliate</a></li>
-            <li><a href="/contact">Contact us</a></li>
+          
+            <li><Link href="/contact">Contact us</Link></li>
           </ul>
         </div>
 
         <div className="footer-column">
           <h3>Legal</h3>
           <ul>
-            <li><a href="/privacy">Privacy policy</a></li>
-            <li><a href="/terms">Terms and conditions</a></li>
-            <li><a href="/aml">Anti Money Laundering policy</a></li>
+            <li><Link href="/privacy-policy">Privacy policy</Link></li>
+            <li><Link href="/terms-and-conditions">Terms and conditions</Link></li>
+            <li><Link href="/anti-laundring">Anti Money Laundering policy</Link></li>
           </ul>
         </div>
 

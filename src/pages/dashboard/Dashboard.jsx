@@ -1,20 +1,146 @@
-import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
+import { getUserProfile } from '../../store/auth/authSlice';
 import { Avatar, AvatarFallback, AvatarImage } from "../../components/ui/avatar";
 import { Badge } from "../../components/ui/badge";
 import { Bell } from "lucide-react";
 import "./dashboard.css";
+import { getUserTransactions } from '../../store/transactions/transactionSlice';
+
+// Approval Modal Component
+const ApprovalModal = () => (
+  <div className="approval-modal">
+    <div className="modal-content">
+      <h2>Account Pending Approval</h2>
+      <p>Your account is currently under review. Please wait for admin approval.</p>
+      <p>This usually takes 24-48 hours.</p>
+    </div>
+  </div>
+);
 
 export default function Dashboard() {
   const navigate = useNavigate();
-//   const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const { user, isLoading } = useSelector((state) => state.auth);
+  const { transactions, stats, isLoading: transactionsLoading } = useSelector(
+    (state) => state.transactions
+  );
+  const [profileLoaded, setProfileLoaded] = useState(false);
 
-//   useEffect(() => {
-//     if (!user) {
-//       navigate('/login');
-//     }
-//   }, [user, navigate]);
+  useEffect(() => {
+    const loadProfile = async () => {
+      try {
+        // Check if user exists and has token
+        if (!user || !user.token) {
+          navigate('/login');
+          return;
+        }
+
+        await dispatch(getUserProfile()).unwrap();
+        setProfileLoaded(true);
+      } catch (error) {
+        console.error('Profile fetch error:', error);
+        if (error?.response?.status === 401) {
+          navigate('/login');
+        }
+      }
+    };
+
+    if (!profileLoaded) {
+      loadProfile();
+    }
+  }, [user, navigate, dispatch, profileLoaded]);
+
+  useEffect(() => {
+    if (user && user.token) {
+      dispatch(getUserTransactions());
+    }
+  }, [user, dispatch]);
+
+  // Show loading state only during initial profile fetch
+  if (!profileLoaded && isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  // If we have user data but not approved
+  if (user && !user.isApproved) {
+    return <ApprovalModal />;
+  }
+
+  // If no user, redirect to login
+  if (!user) {
+    navigate('/login');
+    return null;
+  }
+
+  // Update the transactions section in your dashboard
+  const renderTransactions = () => (
+    <div className="info-card">
+      <h3 className="card-title">Recent Transactions</h3>
+      {stats && (
+        <div className="transaction-stats">
+          <div className="stat-item">
+            <span>Total Transactions:</span>
+            <span>{stats.totalTransactions}</span>
+          </div>
+          <div className="stat-item">
+            <span>Total Sent:</span>
+            <span>${stats.totalSent.toFixed(2)}</span>
+          </div>
+          <div className="stat-item">
+            <span>Total Received:</span>
+            <span>${stats.totalReceived.toFixed(2)}</span>
+          </div>
+        </div>
+      )}
+      <div className="transactions-list">
+        {transactions.length > 0 ? (
+          transactions.map((transaction) => {
+            // Determine transaction type and display text
+            const isReceived = transaction.receiver._id === user._id;
+            const transactionType = transaction.type === 'admin-credit' 
+              ? 'Admin Credit'
+              : isReceived ? 'Received' : 'Sent';
+
+            // Get the other party's details
+            const otherParty = isReceived
+              ? (transaction.sender 
+                  ? `From: ${transaction.sender.firstName} ${transaction.sender.lastName}`
+                  : 'From: System')
+              : `To: ${transaction.receiver.firstName} ${transaction.receiver.lastName}`;
+
+            return (
+              <div key={transaction._id} className="transaction-item">
+                <div className="transaction-type">
+                  {transactionType}
+                </div>
+                <div className="transaction-amount">
+                  ${transaction.amount.toFixed(2)}
+                </div>
+                <div className="transaction-party">
+                  {otherParty}
+                </div>
+                <div className="transaction-status">
+                  {transaction.status}
+                </div>
+                <div className="transaction-date">
+                  {new Date(transaction.timestamp).toLocaleDateString()}
+                </div>
+                {transaction.description && (
+                  <div className="transaction-description">
+                    {transaction.description}
+                  </div>
+                )}
+              </div>
+            );
+          })
+        ) : (
+          <p>No transactions yet</p>
+        )}
+      </div>
+    </div>
+  );
 
   return (
     <div className="dashboard-container">
@@ -25,7 +151,7 @@ export default function Dashboard() {
 
         {/* Welcome message and badge */}
         <div className="welcome-section">
-          <span className="welcome-text">Welcome, Kolawole</span>
+          <span className="welcome-text">Welcome, {user?.firstName}</span>
           <span className="verified-badge">✓ Verified</span>
         </div>
 
@@ -33,12 +159,8 @@ export default function Dashboard() {
         <div className="header-icons">
           <Bell className="notification-icon" />
           <div className="avatar">
-            <img 
-              src="https://github.com/shadcn.png" 
-              alt="User avatar"
-            />
             <div className="avatar-fallback">
-              KA
+              {user?.firstName?.[0]}{user?.lastName?.[0]}
             </div>
           </div>
         </div>
@@ -57,15 +179,15 @@ export default function Dashboard() {
       <div className="stats-grid">
         <div className="stat-card">
           <p className="stat-label">Balance</p>
-          <p className="stat-value">$20,000</p>
+          <p className="stat-value">${user?.balance?.toFixed(2)}</p>
         </div>
         <div className="stat-card">
-          <p className="stat-label">Total Product</p>
-          <p className="stat-value">4</p>
+          <p className="stat-label">Account Number</p>
+          <p className="stat-value">{user?.accountNumber}</p>
         </div>
         <div className="stat-card">
-          <p className="stat-label">Total transactions</p>
-          <p className="stat-value">4</p>
+          <p className="stat-label">Total Transactions</p>
+          <p className="stat-value">{user?.transactions?.length || 0}</p>
         </div>
       </div>
 
@@ -79,39 +201,16 @@ export default function Dashboard() {
             <div className="info-list">
               <div className="info-item">
                 <label>Account Number</label>
-                <p>1234567890</p>
+                <p>{user?.accountNumber}</p>
               </div>
               <div className="info-item">
                 <label>Account Name</label>
-                <p>kunle afolayan</p>
+                <p>{`${user?.firstName} ${user?.middleName || ''} ${user?.lastName}`}</p>
               </div>
               <div className="info-item">
                 <label>Email</label>
-                <p>kunle@gmail.com</p>
+                <p>{user?.email}</p>
               </div>
-            </div>
-          </div>
-
-          {/* Quick Actions */}
-          <div className="info-card">
-            <h3 className="card-title">Quick Actions</h3>
-            <div className="quick-actions-grid">
-              <button className="action-button transfer">
-                <span className="action-icon">💸</span>
-                <span className="action-text">Transfer</span>
-              </button>
-              <button className="action-button transactions">
-                <span className="action-icon">📊</span>
-                <span className="action-text">Transactions</span>
-              </button>
-              <button className="action-button security">
-                <span className="action-icon">🔒</span>
-                <span className="action-text">Security</span>
-              </button>
-              <button className="action-button settings">
-                <span className="action-icon">⚙️</span>
-                <span className="action-text">Settings</span>
-              </button>
             </div>
           </div>
 
@@ -121,54 +220,30 @@ export default function Dashboard() {
             <div className="info-list">
               <div className="info-item">
                 <label>Address</label>
-                <p>1234567890</p>
+                <p>{user?.address}</p>
               </div>
               <div className="info-item">
                 <label>Region</label>
-                <p>Lagos</p>
+                <p>{user?.region}</p>
               </div>
               <div className="info-item">
                 <label>Phone Number</label>
-                <p>08012345678</p>
+                <p>{user?.phoneNumber}</p>
+              </div>
+              <div className="info-item">
+                <label>Gender</label>
+                <p>{user?.gender}</p>
+              </div>
+              <div className="info-item">
+                <label>Zip Code</label>
+                <p>{user?.zipCode}</p>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Recent Transactions */}
-        <div className="transactions-section">
-          <div className="info-card">
-            <div className="transactions-header">
-              <h3 className="card-title">Recent Transactions</h3>
-              <button className="view-all-button">View All</button>
-            </div>
-            <div className="table-container">
-              <table className="transactions-table">
-                <thead>
-                  <tr>
-                    <th>Type</th>
-                    <th>Amount</th>
-                    <th>Status</th>
-                    <th>Date</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Transfer</td>
-                    <td>$20,000.00</td>
-                    <td>
-                      <Badge variant="success">Completed</Badge>
-                    </td>
-                    <td>2024-03-20</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+          {renderTransactions()}
         </div>
       </main>
-
-
     </div>
   );
 }

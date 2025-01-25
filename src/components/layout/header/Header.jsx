@@ -1,11 +1,15 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../../../store/auth/authSlice';
 import './header.css';
 import { CiBank } from "react-icons/ci";
 import { FaBars } from "react-icons/fa";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
 
   const navItems = [
     { path: '/', label: 'Home' },
@@ -15,6 +19,10 @@ const Header = () => {
     { path: '/contact', label: 'Help Desk' },
     // { path: '/contact', label: 'Contact' }
   ];
+
+  const handleLogout = () => {
+    dispatch(logout());
+  };
 
   return (
     <section className="main-header" >
@@ -36,7 +44,20 @@ const Header = () => {
           </nav>
 
           <div className="header-actions">
-            <button className="login-btn"><Link to="/login">Login</Link></button>
+            {user ? (
+              <>
+                <button className="login-btn">
+                  <Link to="/dashboard">Dashboard</Link>
+                </button>
+                <button className="login-btn" onClick={handleLogout}>
+                  Logout
+                </button>
+              </>
+            ) : (
+              <button className="login-btn">
+                <Link to="/login">Login</Link>
+              </button>
+            )}
             {/* <button className="signup-btn">Sign Up</button> */}
             <button 
               className="mobile-menu-btn"

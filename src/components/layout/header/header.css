@@ -1,13 +1,11 @@
 .main-header {
-  /* position: fixed;
-  top: 0;
-  left: 0; */
   width: 100%;
   background: #000000e6;
   background-size: cover;
   background-position: center;
   box-shadow: 0 2px 8px rgba(161, 234, 89, 0.1);
   z-index: 1000;
+  position: relative;
 }
 
 .container {
@@ -31,6 +29,26 @@
   font-style: normal;
   display: flex;
   align-items: center;
+  z-index: 1001;
+}
+
+.bank-name {
+  font-size: 20px;
+  font-weight: 600;
+  color: #4dbf14;
+  padding: 1rem 0;
+  text-decoration: none;
+}
+
+.bank-icon {
+  transition: 0.5s;
+  cursor: pointer;
+  border: none;
+}
+
+.logo:hover {
+  transform: scale(1.1);
+  border: none;
 }
 
 .main-nav ul {
@@ -40,23 +58,7 @@
   margin: 0;
   padding: 0;
 }
-.bank-name{
-  font-size: 20px;
-  font-weight: 600;
-  color: #4dbf14;
-  padding:  1rem 0;
-  text-decoration: none;
 
-}
-.bank-icon{
- transition: 0.5s;
-  cursor: pointer;
-  border: none;
-}
-.logo:hover{
-  transform: scale(1.1);
-  border: none;
-}
 .main-nav a {
   color: #e4f1d8;
   text-decoration: none;
@@ -71,31 +73,38 @@
 .header-actions {
   display: flex;
   gap: 1rem;
+  align-items: center;
 }
 
-.login-btn, .signup-btn {
+.login-btn,
+.signup-btn {
   padding: 8px 20px;
   border-radius: 4px;
   font-weight: 500;
   cursor: pointer;
-}
-
-.login-btn a{
-  text-decoration: none;
-  color: #4dbf14;
+  white-space: nowrap;
 }
 
 .login-btn {
   background: transparent;
   border: 1px solid #4dbf14;
-  color: #4dbf14;
-  transition: 1s ease;
+  transition: all 0.3s ease;
+  color: #fff;
 }
 
-.login-btn:hover{
-  border-color: #c01e4e;
-  color: #fff;
+.login-btn a {
+  text-decoration: none;
+  color: #4dbf14;
+  display: block;
+}
 
+.login-btn:hover {
+  border-color: #c01e4e;
+  background: rgba(192, 30, 78, 0.1);
+}
+
+.login-btn:hover a {
+  color: #c01e4e;
 }
 
 .signup-btn {
@@ -106,39 +115,137 @@
 
 .mobile-menu-btn {
   display: none;
+  background: transparent;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+/* Tablet and Mobile Styles */
+@media (max-width: 1024px) {
+  .main-nav ul {
+    gap: 1rem;
+  }
+  
+  .login-btn,
+  .signup-btn {
+    padding: 6px 16px;
+  }
 }
 
 @media (max-width: 768px) {
   .main-nav {
     display: none;
-  }
-  
-  .main-nav.active {
-    display: block;
     position: absolute;
     top: 80px;
     left: 0;
     width: 100%;
     background: #151515;
-    color: #4dbf14;
-    padding: 20px;
+    padding: 0;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    transition: 0.8s ease;
- 
+    transition: all 0.3s ease;
   }
 
-  .main-nav.active ul {
+  .main-nav.active {
+    display: block;
+  }
+
+  .main-nav ul {
     flex-direction: column;
-    gap: 1rem;
+    padding: 20px;
+    margin: 0;
+  }
+
+  .main-nav li {
+    width: 100%;
+    text-align: center;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(77, 191, 20, 0.1);
+  }
+
+  .main-nav li:last-child {
+    border-bottom: none;
+  }
+
+  .header-actions {
+    gap: 0.5rem;
   }
 
   .mobile-menu-btn {
     display: block;
-    background: none;
-    border: none;
-    width: 30px;
-    height: 30px;
-    position: relative;
-    cursor: pointer;
+    margin-left: 10px;
   }
+
+  .login-btn {
+    font-size: 14px;
+    padding: 6px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 12px;
+  }
+
+  .bank-name {
+    font-size: 16px;
+  }
+
+  .header-content {
+    height: 70px;
+  }
+
+  .header-actions {
+    gap: 0.25rem;
+  }
+
+  .login-btn {
+    padding: 4px 10px;
+    font-size: 13px;
+  }
+
+  .bank-icon {
+    transform: scale(0.8);
+  }
+
+  .main-nav {
+    top: 70px;
+  }
+
+  .main-nav ul {
+    padding: 15px;
+  }
+
+  .main-nav li {
+    padding: 10px 0;
+  }
+}
+
+/* Animation for mobile menu */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.main-nav.active {
+  animation: slideDown 0.3s ease forwards;
+}
+
+/* Fix for multiple buttons in header-actions */
+.header-actions button {
+  min-width: fit-content;
+}
+
+/* Ensure buttons stay clickable */
+.header-actions button a {
+  display: block;
+  width: 100%;
+  height: 100%;
 }

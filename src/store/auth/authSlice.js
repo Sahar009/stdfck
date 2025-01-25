@@ -31,6 +31,57 @@ export const register = createAsyncThunk(
   }
 );
 
+// Login user
+export const login = createAsyncThunk(
+  'auth/login',
+  async (userData, thunkAPI) => {
+    try {
+      return await authService.login(userData);
+    } catch (error) {
+      const message = 
+        (error.response && 
+          error.response.data && 
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+// Get user profile
+export const getUserProfile = createAsyncThunk(
+  'auth/profile',
+  async (_, thunkAPI) => {
+    try {
+      const state = thunkAPI.getState();
+      const token = state.auth.user?.token;
+      
+      if (!token) {
+        throw new Error('No token found');
+      }
+
+      const response = await authService.getUserProfile(token);
+      return response;
+    } catch (error) {
+      console.error('GetUserProfile error:', error);
+      const message = 
+        (error.response && 
+          error.response.data && 
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+// Logout user
+export const logout = createAsyncThunk('auth/logout', async () => {
+  // Remove user from localStorage
+  localStorage.removeItem('user');
+});
+
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -57,6 +108,60 @@ export const authSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
         state.user = null;
+      })
+      .addCase(login.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(login.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.user = action.payload.data;
+      })
+      .addCase(login.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        state.user = null;
+      })
+      .addCase(getUserProfile.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.message = '';
+      })
+      .addCase(getUserProfile.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        // Merge the new data while preserving the token
+        state.user = {
+          ...state.user,
+          ...action.payload.data,
+          token: state.user.token
+        };
+      })
+      .addCase(getUserProfile.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        // Don't clear user data on profile fetch failure
+        // Only clear if specifically unauthorized
+        if (action.payload === 'Not authorized') {
+          state.user = null;
+        }
+      })
+      .addCase(logout.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(logout.fulfilled, (state) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.user = null;
+        state.message = '';
+      })
+      .addCase(logout.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
       });
   },
 });
