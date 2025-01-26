@@ -1,12 +1,20 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, Routes, Route } from 'react-router-dom';
 import { getUserProfile } from '../../store/auth/authSlice';
 import { Avatar, AvatarFallback, AvatarImage } from "../../components/ui/avatar";
 import { Badge } from "../../components/ui/badge";
 import { Bell } from "lucide-react";
 import "./dashboard.css";
 import { getUserTransactions } from '../../store/transactions/transactionSlice';
+import DashboardHeader from './DashboardHeader';
+import DashboardNav from './DashboardNav';
+import Transfer from './Transfer';
+import Loans from './Loans';
+import Settings from './Settings';
+import Transactions from './Transactions';
+import Overview from './Overview';
+// import Overview from './Overview';
 
 // Approval Modal Component
 const ApprovalModal = () => (
@@ -144,105 +152,17 @@ export default function Dashboard() {
 
   return (
     <div className="dashboard-container">
-      {/* Header */}
-      <header className="header">
-        {/* Logo */}
-        <h1 className="logo">UNITY</h1>
-
-        {/* Welcome message and badge */}
-        <div className="welcome-section">
-          <span className="welcome-text">Welcome, {user?.firstName}</span>
-          <span className="verified-badge">✓ Verified</span>
-        </div>
-
-        {/* Icons */}
-        <div className="header-icons">
-          <Bell className="notification-icon" />
-          <div className="avatar">
-            <div className="avatar-fallback">
-              {user?.firstName?.[0]}{user?.lastName?.[0]}
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Navigation */}
-      <nav className="navigation">
-        <button className="nav-button active">Overview</button>
-        <button className="nav-button"><Link to="/transfer">Transfer</Link></button>
-        <button className="nav-button">Loan History</button>
-        <button className="nav-button">Transactions</button>
-        <button className="nav-button">Settings</button>
-      </nav>
-
-      {/* Stats Overview */}
-      <div className="stats-grid">
-        <div className="stat-card">
-          <p className="stat-label">Balance</p>
-          <p className="stat-value">${user?.balance?.toFixed(2)}</p>
-        </div>
-        <div className="stat-card">
-          <p className="stat-label">Account Number</p>
-          <p className="stat-value">{user?.accountNumber}</p>
-        </div>
-        <div className="stat-card">
-          <p className="stat-label">Total Transactions</p>
-          <p className="stat-value">{user?.transactions?.length || 0}</p>
-        </div>
-      </div>
-
-      {/* Main Content */}
+      <DashboardHeader user={user} />
+      <DashboardNav />
+      
       <main className="main-container">
-        {/* Account Overview */}
-        <div className="overview-grid">
-          {/* Account Information */}
-          <div className="info-card">
-            <h3 className="card-title">Account Information</h3>
-            <div className="info-list">
-              <div className="info-item">
-                <label>Account Number</label>
-                <p>{user?.accountNumber}</p>
-              </div>
-              <div className="info-item">
-                <label>Account Name</label>
-                <p>{`${user?.firstName} ${user?.middleName || ''} ${user?.lastName}`}</p>
-              </div>
-              <div className="info-item">
-                <label>Email</label>
-                <p>{user?.email}</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Profile Information */}
-          <div className="info-card">
-            <h3 className="card-title">Profile Information</h3>
-            <div className="info-list">
-              <div className="info-item">
-                <label>Address</label>
-                <p>{user?.address}</p>
-              </div>
-              <div className="info-item">
-                <label>Region</label>
-                <p>{user?.region}</p>
-              </div>
-              <div className="info-item">
-                <label>Phone Number</label>
-                <p>{user?.phoneNumber}</p>
-              </div>
-              <div className="info-item">
-                <label>Gender</label>
-                <p>{user?.gender}</p>
-              </div>
-              <div className="info-item">
-                <label>Zip Code</label>
-                <p>{user?.zipCode}</p>
-              </div>
-            </div>
-          </div>
-
-          {renderTransactions()}
-        </div>
+        <Routes>
+          <Route path="/" element={<Overview />} />
+          <Route path="/transfer" element={<Transfer />} />
+          <Route path="/loans" element={<Loans />} />
+          <Route path="/transactions" element={<Transactions />} />
+          <Route path="/settings" element={<Settings />} />
+        </Routes>
       </main>
     </div>
   );

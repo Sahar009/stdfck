@@ -1,0 +1,41 @@
+.navigation {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.nav-button {
+  padding: 0.5rem 1rem;
+  border: none;
+  background: none;
+  color: #6b7280;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  border-radius: 0.375rem;
+  transition: all 0.2s ease;
+}
+
+.nav-button:hover {
+  color: #4dbf14;
+  background: #f3f4f6;
+}
+
+.nav-button.active {
+  color: #4dbf14;
+  background: #ecfdf5;
+}
+
+@media (max-width: 768px) {
+  .navigation {
+    overflow-x: auto;
+    padding: 0.75rem;
+  }
+
+  .nav-button {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.875rem;
+  }
+} 

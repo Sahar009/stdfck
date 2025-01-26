@@ -19,6 +19,8 @@ import PrivacyPolicy from './pages/policies/PrivacyPolicy';
 import AntiLaundering from './pages/policies/AntiLaundering';
 import TermsConditions from './pages/policies/TermsConditions';
 import NotFound from './pages/NotFound';
+import AdminLogin from './pages/admin/AdminLogin';
+import AdminRoute from './components/AdminRoute';
 
 function App() {
   useEffect(() => {
@@ -35,10 +37,11 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login/>} />
           <Route path="/register" element={<Register/>} />
-          <Route path="/dashboard" element={<Dashboard/>} />
+          <Route path="/dashboard/*" element={<Dashboard/>} />
           <Route path="/transfer" element={<Transfer/>} />
           <Route path="/admin" element={<AdminDashboard/>} />
-          <Route path="/admin/dashboard" element={<AdminDashboard/>} />
+          <Route path="/admin/dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+          <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/about" element={<About/>} />
           <Route path="/business" element={<Business/>} />
           <Route path="/contact" element={<Contact/>} />

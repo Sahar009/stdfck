@@ -1,18 +1,54 @@
-import { useState } from 'react';
-import { Users, CreditCard, BarChart2, Settings, LogOut } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { 
+  Users, CreditCard, BarChart2, Settings, LogOut, 
+  CheckCircle, AlertCircle, FileCheck 
+} from 'lucide-react';
+import { 
+  getPendingApprovals, getAllTransactions, getTransactionStats,
+  getUnverifiedIds, approveUser, verifyUserId, creditUser, logout 
+} from '../../store/admin/adminSlice';
 import "./adminDashboard.css";
 
 export default function AdminDashboard() {
-  const [activeTab, setActiveTab] = useState('users');
+  const dispatch = useDispatch();
+  const { 
+    pendingApprovals, transactions, transactionStats, 
+    unverifiedIds, isLoading 
+  } = useSelector(state => state.admin);
+
+  const [activeTab, setActiveTab] = useState('dashboard');
   const [creditData, setCreditData] = useState({
-    userAccountNumber: '',
+    accountNumber: '',
     amount: '',
     description: ''
   });
 
+  useEffect(() => {
+    dispatch(getTransactionStats());
+    dispatch(getPendingApprovals());
+    dispatch(getAllTransactions());
+    dispatch(getUnverifiedIds());
+  }, [dispatch]);
+
   const handleCredit = async (e) => {
     e.preventDefault();
-    // Add credit logic here
+    await dispatch(creditUser(creditData));
+    setCreditData({ accountNumber: '', amount: '', description: '' });
+  };
+
+  const handleApproveUser = async (userId) => {
+    await dispatch(approveUser(userId));
+    dispatch(getPendingApprovals());
+  };
+
+  const handleVerifyId = async (userId) => {
+    await dispatch(verifyUserId(userId));
+    dispatch(getUnverifiedIds());
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
   };
 
   return (
@@ -25,13 +61,35 @@ export default function AdminDashboard() {
         
         <div className="sidebar-menu">
           <button 
-            className={`menu-item ${activeTab === 'users' ? 'active' : ''}`}
-            onClick={() => setActiveTab('users')}
+            className={`menu-item ${activeTab === 'dashboard' ? 'active' : ''}`}
+            onClick={() => setActiveTab('dashboard')}
           >
-            <Users size={20} />
-            <span>Users</span>
+            <BarChart2 size={20} />
+            <span>Dashboard</span>
+          </button>
+
+          <button 
+            className={`menu-item ${activeTab === 'approvals' ? 'active' : ''}`}
+            onClick={() => setActiveTab('approvals')}
+          >
+            <CheckCircle size={20} />
+            <span>Approvals</span>
+            {pendingApprovals.length > 0 && (
+              <span className="badge">{pendingApprovals.length}</span>
+            )}
           </button>
           
+          <button 
+            className={`menu-item ${activeTab === 'verifications' ? 'active' : ''}`}
+            onClick={() => setActiveTab('verifications')}
+          >
+            <FileCheck size={20} />
+            <span>ID Verifications</span>
+            {unverifiedIds.length > 0 && (
+              <span className="badge">{unverifiedIds.length}</span>
+            )}
+          </button>
+
           <button 
             className={`menu-item ${activeTab === 'credit' ? 'active' : ''}`}
             onClick={() => setActiveTab('credit')}
@@ -44,17 +102,13 @@ export default function AdminDashboard() {
             className={`menu-item ${activeTab === 'transactions' ? 'active' : ''}`}
             onClick={() => setActiveTab('transactions')}
           >
-            <BarChart2 size={20} />
+            <Users size={20} />
             <span>Transactions</span>
           </button>
         </div>
 
         <div className="sidebar-footer">
-          <button className="menu-item">
-            <Settings size={20} />
-            <span>Settings</span>
-          </button>
-          <button className="menu-item logout">
+          <button className="menu-item logout" onClick={handleLogout}>
             <LogOut size={20} />
             <span>Logout</span>
           </button>
@@ -63,9 +117,32 @@ export default function AdminDashboard() {
 
       {/* Main Content */}
       <main className="admin-main">
-        {activeTab === 'users' && (
+        {activeTab === 'dashboard' && (
+          <div className="dashboard-stats">
+            <div className="stats-grid">
+              <div className="stat-card">
+                <h3>Total Transactions</h3>
+                <p className="stat-value">{transactionStats?.totalTransactions || 0}</p>
+              </div>
+              <div className="stat-card">
+                <h3>Total Amount</h3>
+                <p className="stat-value">${transactionStats?.totalAmount?.toLocaleString() || 0}</p>
+              </div>
+              <div className="stat-card">
+                <h3>Success Rate</h3>
+                <p className="stat-value">{transactionStats?.successRate || 0}%</p>
+              </div>
+              <div className="stat-card">
+                <h3>Pending Approvals</h3>
+                <p className="stat-value">{pendingApprovals.length}</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'approvals' && (
           <div className="content-section">
-            <h2 className="section-title">All Users</h2>
+            <h2 className="section-title">Pending Approvals</h2>
             <div className="table-container">
               <table className="admin-table">
                 <thead>
@@ -73,12 +150,25 @@ export default function AdminDashboard() {
                     <th>Name</th>
                     <th>Email</th>
                     <th>Account Number</th>
-                    <th>Balance</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {/* Add user rows here */}
+                  {pendingApprovals.map((user) => (
+                    <tr key={user._id}>
+                      <td>{`${user.firstName} ${user.lastName}`}</td>
+                      <td>{user.email}</td>
+                      <td>{user.accountNumber}</td>
+                      <td>
+                        <button 
+                          className="action-button approve"
+                          onClick={() => handleApproveUser(user._id)}
+                        >
+                          Approve
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
@@ -94,10 +184,10 @@ export default function AdminDashboard() {
                   <label>Account Number</label>
                   <input
                     type="text"
-                    value={creditData.userAccountNumber}
+                    value={creditData.accountNumber}
                     onChange={(e) => setCreditData({
                       ...creditData,
-                      userAccountNumber: e.target.value
+                      accountNumber: e.target.value
                     })}
                     className="form-input"
                   />
@@ -106,7 +196,7 @@ export default function AdminDashboard() {
                 <div className="form-group">
                   <label>Amount</label>
                   <div className="amount-input-wrapper">
-                    <span className="currency-symbol">₦</span>
+                    <span className="currency-symbol">$</span>
                     <input
                       type="number"
                       value={creditData.amount}
@@ -140,6 +230,52 @@ export default function AdminDashboard() {
           </div>
         )}
 
+        {activeTab === 'verifications' && (
+          <div className="content-section">
+            <h2 className="section-title">ID Verifications</h2>
+            <div className="table-container">
+              <table className="admin-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>ID Card</th>
+                    <th>Submitted Date</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {unverifiedIds.map((user) => (
+                    <tr key={user._id}>
+                      <td>{`${user.firstName} ${user.lastName}`}</td>
+                      <td>{user.email}</td>
+                      <td>
+                        <a 
+                          href={user.idCard.url} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="view-document"
+                        >
+                          View ID
+                        </a>
+                      </td>
+                      <td>{new Date(user.createdAt).toLocaleDateString()}</td>
+                      <td>
+                        <button 
+                          className="action-button verify"
+                          onClick={() => handleVerifyId(user._id)}
+                        >
+                          Verify ID
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
         {activeTab === 'transactions' && (
           <div className="content-section">
             <h2 className="section-title">All Transactions</h2>
@@ -150,14 +286,39 @@ export default function AdminDashboard() {
                     <th>Reference</th>
                     <th>Type</th>
                     <th>Amount</th>
-                    <th>Sender</th>
-                    <th>Receiver</th>
                     <th>Status</th>
                     <th>Date</th>
+                    <th>Details</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {/* Add transaction rows here */}
+                  {transactions.map((transaction) => (
+                    <tr key={transaction._id}>
+                      <td>{transaction._id.slice(-8).toUpperCase()}</td>
+                      <td>
+                        <span className={`transaction-type ${transaction.type}`}>
+                          {transaction.type}
+                        </span>
+                      </td>
+                      <td>${transaction.amount.toLocaleString()}</td>
+                      <td>
+                        <span className={`status-badge ${transaction.status}`}>
+                          {transaction.status}
+                        </span>
+                      </td>
+                      <td>{new Date(transaction.timestamp).toLocaleDateString()}</td>
+                      <td>
+                        <button 
+                          className="action-button view"
+                          onClick={() => {
+                            // Add transaction details view logic
+                          }}
+                        >
+                          View
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
