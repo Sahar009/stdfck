@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { User, Lock, Trash2, AlertCircle, Upload, Camera } from 'lucide-react';
+import { User, Lock, Trash2, AlertCircle, Upload, Camera, X } from 'lucide-react';
 import { changePassword, updateContactInfo, deleteAccount, reset, uploadImage } from '../../store/settings/settingsSlice';
 import { logout } from '../../store/auth/authSlice';
 import './Settings.css';
@@ -99,7 +99,15 @@ const Settings = () => {
     <div className="settings-container">
       {notification.message && (
         <div className={`notification ${notification.type}`}>
-          {notification.message}
+          <button 
+            className="close-btn"
+            onClick={() => setNotification({ type: '', message: '' })}
+          >
+            <X size={18} />
+          </button>
+          <div className="message">
+            {notification.message}
+          </div>
         </div>
       )}
 
@@ -138,7 +146,7 @@ const Settings = () => {
                     <img 
                       src={imagePreview.avatar || user.avatar.url} 
                       alt="Profile" 
-                      className="profile-image"
+                      className="image-container id-card"
                     />
                   ) : (
                     <div className="image-placeholder">

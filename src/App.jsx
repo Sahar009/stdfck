@@ -2,7 +2,7 @@ import './App.css'
 import Header from './components/layout/header/Header'
 import { HelmetProvider } from 'react-helmet-async';
 import Home from './pages/Home';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { useEffect } from 'react';
@@ -23,15 +23,30 @@ import AdminLogin from './pages/admin/AdminLogin';
 import AdminRoute from './components/AdminRoute';
 
 function App() {
+  const location = useLocation();
+  
+  // Define routes where header and footer should be hidden
+  const noHeaderFooterRoutes = [
+    '/dashboard',
+    '/admin/dashboard',
+    '/admin'
+  ];
+
+  // Check if current path starts with any of the routes where header/footer should be hidden
+  const shouldHideHeaderFooter = noHeaderFooterRoutes.some(route => 
+    location.pathname.startsWith(route)
+  );
+
   useEffect(() => {
     AOS.init({
       duration: 1000,
       once: true
     });
   }, []);
+
   return (
     <HelmetProvider>
-      <Header/>
+      {!shouldHideHeaderFooter && <Header />}
       <main>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -52,7 +67,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
-      <Footer/>
+      {!shouldHideHeaderFooter && <Footer />}
     </HelmetProvider>
   )
 }

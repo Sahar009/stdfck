@@ -28,32 +28,45 @@ const externalTransfer = async (transferData, token) => {
 
 // Verify Account
 const verifyAccount = async (accountNumber, token) => {
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    };
-  
-    const response = await axios.get(`/api/verify-account/${accountNumber}`, config);
-    return response.data;
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
   };
 
-  const getWalletBalance = async (token) => {
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    };
-  
-    const response = await axios.get(API_URL + 'balance', config);
-    return response.data;
+  const response = await axios.get(API_URL + `verify-account/${accountNumber}`, config);
+  return response.data;
+};
+
+// Admin Credit User
+const adminCredit = async (creditData, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
   };
+
+  const response = await axios.post(API_URL + 'transactions/admin-credit', creditData, config);
+  return response.data;
+};
+
+const getWalletBalance = async (token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  };
+
+  const response = await axios.get(API_URL + 'balance', config);
+  return response.data;
+};
 
 const transferService = {
   transferMoney,
   externalTransfer,
   getWalletBalance,
-  verifyAccount
+  verifyAccount,
+  adminCredit
 };
 
 export default transferService; 

@@ -42,6 +42,7 @@ const getAllTransactions = async (params, token) => {
     params,
   };
   const response = await axios.get(API_URL + 'transactions', config);
+
   return response.data;
 };
 
@@ -53,6 +54,7 @@ const getTransactionStats = async (token) => {
     },
   };
   const response = await axios.get(API_URL + 'transactions/stats', config);
+ 
   return response.data;
 };
 
@@ -89,6 +91,51 @@ const verifyUserId = async (userId, token) => {
   return response.data;
 };
 
+// Verify account
+const verifyAccount = async (accountNumber, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await axios.get(`http://localhost:10000/api/v1/user/verify-account/${accountNumber}`, config);
+  return response.data;
+};
+
+// Get all users
+const getAllUsers = async (params, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    params,
+  };
+  const response = await axios.get(API_URL + 'users', config);
+  return response.data;
+};
+
+// Get user by ID
+const getUserById = async (userId, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await axios.get(API_URL + `users/${userId}`, config);
+  return response.data;
+};
+
+// Delete user
+const deleteUser = async (userId, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await axios.delete(API_URL + `users/${userId}`, config);
+  return response.data;
+};
+
 const adminService = {
   loginAdmin,
   getPendingApprovals,
@@ -98,6 +145,10 @@ const adminService = {
   creditUser,
   getUnverifiedIds,
   verifyUserId,
+  verifyAccount,
+  deleteUser,
+  getAllUsers,
+  getUserById,
 };
 
 export default adminService; 

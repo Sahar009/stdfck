@@ -10,7 +10,7 @@ const changePassword = async (passwordData, token) => {
     }
   };
 
-  const response = await axios.put(API_URL + 'change-password', passwordData, config);
+  const response = await axios.put(API_URL + '/settings/change-password', passwordData, config);
   return response.data;
 };
 
@@ -22,7 +22,7 @@ const updateContactInfo = async (contactData, token) => {
     }
   };
 
-  const response = await axios.put(API_URL + 'update-contact', contactData, config);
+  const response = await axios.put(API_URL + 'settings/update-contact', contactData, config);
   return response.data;
 };
 
@@ -34,7 +34,7 @@ const deleteAccount = async (password, token) => {
     }
   };
 
-  const response = await axios.delete(API_URL + 'delete-account', {
+  const response = await axios.delete(API_URL + 'settings/delete-account', {
     ...config,
     data: { password }
   });

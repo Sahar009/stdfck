@@ -545,4 +545,129 @@ input:checked + .slider:before {
   .image-container {
     max-width: 100%;
   }
+}
+
+/* Modal Styles */
+.notification {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 1.5rem 2rem;
+  border-radius: 12px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  z-index: 1000;
+  min-width: 300px;
+  max-width: 90%;
+  text-align: center;
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+/* Modal overlay */
+.notification::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: -1;
+}
+
+/* Success state */
+.notification.success {
+  border-left: 4px solid #4dbf14;
+}
+
+.notification.success::after {
+  content: '✓';
+  position: absolute;
+  top: -15px;
+  left: -15px;
+  background: #4dbf14;
+  color: white;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  box-shadow: 0 4px 6px -1px rgba(77, 191, 20, 0.2);
+}
+
+/* Error state */
+.notification.error {
+  border-left: 4px solid #dc2626;
+}
+
+.notification.error::after {
+  content: '!';
+  position: absolute;
+  top: -15px;
+  left: -15px;
+  background: #dc2626;
+  color: white;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.2);
+}
+
+/* Modal animation */
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -40%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+/* Close button */
+.notification .close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.notification .close-btn:hover {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+/* Message styling */
+.notification .message {
+  margin: 0.5rem 0;
+  color: #374151;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .notification {
+    width: 90%;
+    min-width: auto;
+    padding: 1.25rem;
+  }
 } 
