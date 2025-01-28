@@ -92,36 +92,44 @@ export const authSlice = createSlice({
       state.isError = false;
       state.message = '';
     },
+    clearUser: (state) => {
+      state.user = null;
+      state.isLoading = false;
+      state.isSuccess = false;
+      state.isError = false;
+      state.message = '';
+    }
   },
   extraReducers: (builder) => {
     builder
       .addCase(register.pending, (state) => {
         state.isLoading = true;
+        state.isError = false;
+        state.message = '';
       })
-      .addCase(register.fulfilled, (state, action) => {
+      .addCase(register.fulfilled, (state) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.user = action.payload.data;
       })
       .addCase(register.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
-        state.user = null;
       })
       .addCase(login.pending, (state) => {
         state.isLoading = true;
+        state.isError = false;
+        state.message = '';
       })
       .addCase(login.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.user = action.payload.data;
+        state.user = action.payload;
       })
       .addCase(login.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
-        state.user = null;
       })
       .addCase(getUserProfile.pending, (state) => {
         state.isLoading = true;
@@ -149,22 +157,15 @@ export const authSlice = createSlice({
           state.user = null;
         }
       })
-      .addCase(logout.pending, (state) => {
-        state.isLoading = true;
-      })
       .addCase(logout.fulfilled, (state) => {
-        state.isLoading = false;
-        state.isSuccess = true;
         state.user = null;
-        state.message = '';
-      })
-      .addCase(logout.rejected, (state, action) => {
         state.isLoading = false;
-        state.isError = true;
-        state.message = action.payload;
+        state.isSuccess = false;
+        state.isError = false;
+        state.message = '';
       });
   },
 });
 
-export const { reset } = authSlice.actions;
+export const { reset, clearUser } = authSlice.actions;
 export default authSlice.reducer;

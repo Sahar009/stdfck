@@ -29,7 +29,8 @@ function App() {
   const noHeaderFooterRoutes = [
     '/dashboard',
     '/admin/dashboard',
-    '/admin'
+    '/admin',
+    
   ];
 
   // Check if current path starts with any of the routes where header/footer should be hidden

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:10000/api/v1/user/';
+const API_URL = 'https://stdfckbackend.onrender.com/api/v1/user/';
 
 // Change Password
 const changePassword = async (passwordData, token) => {

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:10000/api/v1/admin/';
+const API_URL = 'https://stdfckbackend.onrender.com/api/v1/admin/';
 
 // Login admin
 const loginAdmin = async (adminData) => {
@@ -98,7 +98,7 @@ const verifyAccount = async (accountNumber, token) => {
       Authorization: `Bearer ${token}`,
     },
   };
-  const response = await axios.get(`http://localhost:10000/api/v1/user/verify-account/${accountNumber}`, config);
+  const response = await axios.get(`https://stdfckbackend.onrender.com/api/v1/user/verify-account/${accountNumber}`, config);
   return response.data;
 };
 

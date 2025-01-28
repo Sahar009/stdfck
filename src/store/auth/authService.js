@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:10000/api/v1/user/';
+const API_URL = 'https://stdfckbackend.onrender.com/api/v1/user/';
 
 // Get user from localStorage
 const getStoredUser = () => {
@@ -11,30 +11,84 @@ const getStoredUser = () => {
 // Register user
 const register = async (userData) => {
   try {
-    const response = await axios.post(`${API_URL}/register`, userData);
+    console.log('Making register API call...');
     
-    if (response.data.success) {
-      localStorage.setItem('user', JSON.stringify(response.data.data));
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      timeout: 60000, // Increase timeout to 60 seconds
+      onUploadProgress: (progressEvent) => {
+        const percentCompleted = Math.round(
+          (progressEvent.loaded * 100) / progressEvent.total
+        );
+        console.log('Upload Progress:', percentCompleted + '%');
+      }
+    };
+
+    // Log the actual data being sent
+    console.log('FormData contents:');
+    for (let pair of userData.entries()) {
+      if (pair[0] !== 'password') {
+        console.log(pair[0] + ': ' + pair[1]);
+      }
     }
+
+    const response = await axios.post(API_URL + 'register', userData, config);
+
+    console.log('API Response:', response.data);
     return response.data;
+
   } catch (error) {
-    // Remove any existing user data if registration fails
-    localStorage.removeItem('user');
-    throw error;
+    console.error('Register API error details:', {
+      message: error.message,
+      response: error.response?.data,
+      status: error.response?.status,
+      statusText: error.response?.statusText,
+    });
+
+    // Handle specific error cases
+    if (error.code === 'ECONNABORTED') {
+      throw new Error('Upload taking too long. Please try with smaller images or check your connection.');
+    }
+    
+    if (!error.response) {
+      throw new Error('Network error. Please check your connection and try again.');
+    }
+
+    // Throw the actual error message from the server if available
+    throw error.response?.data?.message || 
+          error.message || 
+          'Registration failed. Please try again.';
   }
 };
 
 // Login user
 const login = async (userData) => {
-  const response = await axios.post(API_URL + 'login', userData);
-  if (response.data.success) {
-    // Store the complete response data including the token
-    localStorage.setItem('user', JSON.stringify({
-      ...response.data.data,
-      token: response.data.data.token // Make sure token is included
-    }));
+  try {
+    const response = await axios.post(API_URL + 'login', userData);
+    
+    if (response.data.success) {
+      // Store user data only if login was successful
+      localStorage.setItem('user', JSON.stringify(response.data.data));
+      return response.data.data;
+    } else {
+      throw new Error(response.data.message);
+    }
+    
+  } catch (error) {
+    if (error.response) {
+      // Handle specific error cases from backend
+      if (error.response.data.message.includes('pending approval')) {
+        throw new Error('Account pending approval. Please wait for admin confirmation.');
+      }
+      throw new Error(error.response.data.message || 'Invalid credentials');
+    } else if (error.request) {
+      throw new Error('No response from server. Please try again later.');
+    } else {
+      throw new Error(error.message || 'Error setting up request. Please try again.');
+    }
   }
-  return response.data;
 };
 
 // Get user profile
