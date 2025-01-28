@@ -120,6 +120,11 @@
   padding: 8px;
   cursor: pointer;
   z-index: 1001;
+  transition: transform 0.3s ease;
+}
+
+.mobile-menu-btn:hover {
+  transform: scale(1.1);
 }
 
 /* Tablet and Mobile Styles */
@@ -137,14 +142,16 @@
 @media (max-width: 768px) {
   .main-nav {
     display: none;
-    position: absolute;
+    position: fixed;
     top: 80px;
     left: 0;
     width: 100%;
+    height: calc(100vh - 80px);
     background: #151515;
     padding: 0;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     transition: all 0.3s ease;
+    overflow-y: auto;
   }
 
   .main-nav.active {
@@ -173,7 +180,9 @@
   }
 
   .mobile-menu-btn {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin-left: 10px;
   }
 
@@ -248,4 +257,34 @@
   display: block;
   width: 100%;
   height: 100%;
+}
+
+/* Animation for menu icon transition */
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(180deg);
+  }
+}
+
+.mobile-menu-btn svg {
+  animation: rotate 0.3s ease;
+}
+
+/* Update overlay for mobile menu */
+.menu-overlay {
+  display: none;
+  position: fixed;
+  top: 80px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.menu-overlay.active {
+  display: block;
 }

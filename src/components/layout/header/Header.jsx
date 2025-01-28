@@ -5,6 +5,7 @@ import { logout } from '../../../store/auth/authSlice';
 import './header.css';
 import { CiBank } from "react-icons/ci";
 import { FaBars } from "react-icons/fa";
+import { IoMdClose } from "react-icons/io";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -24,6 +25,10 @@ const Header = () => {
     dispatch(logout());
   };
 
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   return (
     <section className="main-header" >
       <div className="container">
@@ -37,7 +42,9 @@ const Header = () => {
             <ul>
               {navItems.map((item) => (
                 <li key={item.path}>
-                  <Link to={item.path}>{item.label}</Link>
+                  <Link to={item.path} onClick={() => setIsMenuOpen(false)}>
+                    {item.label}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -61,9 +68,14 @@ const Header = () => {
             {/* <button className="signup-btn">Sign Up</button> */}
             <button 
               className="mobile-menu-btn"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              onClick={toggleMenu}
+              aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
             >
-              <FaBars size={20} color='#4dbf14'/>
+              {isMenuOpen ? (
+                <IoMdClose size={24} color='#4dbf14'/>
+              ) : (
+                <FaBars size={20} color='#4dbf14'/>
+              )}
             </button>
           </div>
         </div>
