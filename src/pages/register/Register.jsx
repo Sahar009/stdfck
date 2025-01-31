@@ -4,6 +4,7 @@ import './register.css';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { X, AlertCircle, CheckCircle2 } from 'lucide-react';
+import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner';
 
 function Register() {
     const navigate = useNavigate();
@@ -177,24 +178,7 @@ function Register() {
     }
   };
 
-  // Loading Spinner Component
-  const LoadingSpinner = () => (
-    <div className="loading-overlay">
-      <div className="loading-container">
-        <div className="spinner-wrapper">
-          <div className="spinner"></div>
-        </div>
-        <div className="loading-text">
-          <p>Processing Registration</p>
-          <div className="loading-dots">
-            <span>.</span>
-            <span>.</span>
-            <span>.</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+
 
   const closeNotification = () => {
     setNotification({ show: false, type: '', message: '' });
