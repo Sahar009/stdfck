@@ -37,7 +37,7 @@ export default function Transfer() {
           <div className="form-group">
             <label htmlFor="amount">Amount</label>
             <div className="amount-input-wrapper">
-              <span className="currency-symbol">₦</span>
+              <span className="currency-symbol">$</span>
               <input
                 type="number"
                 id="amount"
@@ -70,15 +70,15 @@ export default function Transfer() {
           <div className="transfer-summary">
             <div className="summary-item">
               <span>Transfer Amount</span>
-              <span className="amount">₦{transferData.amount || '0.00'}</span>
+              <span className="amount">${transferData.amount || '0.00'}</span>
             </div>
             <div className="summary-item">
               <span>Transfer Fee</span>
-              <span className="fee">₦0.00</span>
+              <span className="fee">$0.00</span>
             </div>
             <div className="summary-item total">
               <span>Total</span>
-              <span className="total-amount">₦{transferData.amount || '0.00'}</span>
+              <span className="total-amount">${transferData.amount || '0.00'}</span>
             </div>
           </div>
 

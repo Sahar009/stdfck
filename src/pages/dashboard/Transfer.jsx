@@ -383,11 +383,11 @@ export default function Transfer() {
           <div className="transfer-summary">
             <div className="summary-item">
               <span>Transfer Amount</span>
-              <span className="amount">₦{transferData.amount || '0.00'}</span>
+              <span className="amount">${transferData.amount || '0.00'}</span>
             </div>
             <div className="summary-item fee">
               <span>Transfer Fee (0.002%)</span>
-              <span className="fee-amount">-₦{
+              <span className="fee-amount">-${
                 transferData.amount ? 
                 calculateTransferFee(parseFloat(transferData.amount)).fee.toFixed(2) 
                 : '0.00'
@@ -395,7 +395,7 @@ export default function Transfer() {
             </div>
             <div className="summary-item total">
               <span>Final Amount</span>
-              <span className="final-amount">₦{
+              <span className="final-amount">${
                 transferData.amount ? 
                 calculateTransferFee(parseFloat(transferData.amount)).finalAmount.toFixed(2) 
                 : '0.00'

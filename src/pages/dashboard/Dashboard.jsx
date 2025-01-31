@@ -14,6 +14,7 @@ import Loans from './Loans';
 import Settings from './Settings';
 import Transactions from './Transactions';
 import Overview from './Overview';
+import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner';
 // import Overview from './Overview';
 
 // Approval Modal Component
@@ -68,7 +69,7 @@ export default function Dashboard() {
 
   // Show loading state only during initial profile fetch
   if (!profileLoaded && isLoading) {
-    return <div>Loading...</div>;
+    return <div><LoadingSpinner /></div>;
   }
 
   // If we have user data but not approved

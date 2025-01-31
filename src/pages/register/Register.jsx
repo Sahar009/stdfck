@@ -48,12 +48,12 @@ function Register() {
         message: 'Registration successful! Please login to continue.'
       });
       // Set a single timeout to navigate
-      const timer = setTimeout(() => {
-        navigate('/login');
-      }, 2000);
+      // const timer = setTimeout(() => {
+      //   navigate('/login');
+      // }, 2000);
       
       // Cleanup timeout on unmount
-      return () => clearTimeout(timer);
+      // return () => clearTimeout(timer);
     }
 
     // Cleanup notification on unmount or when dependencies change

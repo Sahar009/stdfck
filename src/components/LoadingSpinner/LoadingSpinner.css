@@ -26,6 +26,9 @@
 .spinner-wrapper {
   width: 60px;
   height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .spinner {
@@ -35,6 +38,7 @@
   border-top: 4px solid #4dbf14;
   border-radius: 50%;
   animation: spin 1s linear infinite;
+  box-sizing: border-box;
 }
 
 .loading-text {

@@ -35,7 +35,7 @@ const TransferStatusModal = ({
         {icon}
         <h2>{title}</h2>
         {amount && (
-          <div className="amount">₦{parseFloat(amount).toLocaleString()}</div>
+          <div className="amount">${parseFloat(amount).toLocaleString()}</div>
         )}
         <p>{message}</p>
         {subtitle && (
