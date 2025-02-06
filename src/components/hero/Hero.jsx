@@ -32,10 +32,12 @@ const Hero = () => {
         <h1>Empower Your Financial Future with Unity Finance</h1>
 <p>Your trusted partner for banking, credit cards, loans, mortgages, and more. Discover tailored solutions that fit your financial needs.</p>
 <div className="hero-actions">
-  <Link to="/services" className="cta-button">
-    Explore Our Services
-  </Link>
-  <Link to="/apply" className="secondary-button">
+  {/* <Link to="/services" className="cta-button"> */}
+  <a className="cta-button" href="#services">
+  Explore Our Services
+  </a>
+  {/* </Link> */}
+  <Link to="/register" className="secondary-button">
     Apply Now
   </Link>
 </div>

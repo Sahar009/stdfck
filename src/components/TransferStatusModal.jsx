@@ -1,4 +1,4 @@
-import { CheckCircle, XCircle, Clock } from 'lucide-react';
+import { CheckCircle, XCircle, Clock, X } from 'lucide-react';
 import './TransferStatusModal.css';
 
 const TransferStatusModal = ({ 
@@ -11,8 +11,10 @@ const TransferStatusModal = ({
 }) => {
   const statusConfig = {
     success: {
-      icon: <CheckCircle className="status-icon success" size={50} />,
-      title: transferType === 'external' ? 'Transfer Initiated' : 'Transfer Successful',
+      // icon: <CheckCircle className="status-icon success" size={50} />,
+      icon: <XCircle className="status-icon error" size={50} />,
+      // title: transferType === 'external' ? 'Transfer Initiated' : 'Transfer Successful',
+       title: transferType === 'external' ? 'Transfer Failed' : 'Transfer Successful',
       className: 'success'
     },
     pending: {
@@ -32,6 +34,9 @@ const TransferStatusModal = ({
   return (
     <div className="modal-overlay">
       <div className={`transfer-status-modal ${className}`}>
+        <button className="modal-close-icon" onClick={onClose}>
+          <X color="red" size={24} />
+        </button>
         {icon}
         <h2>{title}</h2>
         {amount && (

@@ -50,12 +50,18 @@ export default function Transfer() {
     if (isSuccess) {
       setTransferStatus({
         status: 'success',
+        // message: transferType === 'external' 
+        //   ? 'Your external transfer has been initiated. Please note that it may take 3-7 business days to complete the transfer to an external bank account.'
+        //   : 'Your transfer has been completed successfully.',
+        // subtitle: transferType === 'external' 
+        //   ? '3-7 Business Days Processing Time'
+        //   : null
         message: transferType === 'external' 
-          ? 'Your external transfer has been initiated. Please note that it may take 3-7 business days to complete the transfer to an external bank account.'
-          : 'Your transfer has been completed successfully.',
-        subtitle: transferType === 'external' 
-          ? '3-7 Business Days Processing Time'
-          : null
+        ? 'An Error Occured Your external transfer cannot be completed, kindly contact customer service'
+        : 'Your transfer is not completed',
+      subtitle: transferType === 'external' 
+        ? 'Your transfer is not completed'
+        : null
       });
       setShowStatusModal(true);
     } else if (isError) {
@@ -177,8 +183,8 @@ export default function Transfer() {
       // For external transfers, show processing status immediately
       setTransferStatus({
         status: 'pending',
-        message: 'Your external transfer request is being processed. Please note that it may take 3-7 business days to complete the transfer.',
-        subtitle: '3-7 Business Days Processing Time'
+        message: 'An Error Occured Your external transfer be completed kindly contact customer service',
+        subtitle: 'Transfer Cancelled'
       });
       setShowStatusModal(true);
 

@@ -135,7 +135,7 @@ const Resources = () => {
     : resources.filter(resource => resource.category === activeCategory);
 
   return (
-    <section className="resources">
+    <section id="services" className="resources">
       <div className="container">
         <h2>Empower Your Financial Journey</h2>
         

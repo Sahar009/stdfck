@@ -3,6 +3,8 @@
     background: #f8f9fa;
     position: relative;
     overflow-x: hidden;
+    transition:1s ease;
+    
   }
   
   .resources h2 {
