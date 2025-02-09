@@ -136,6 +136,19 @@ const deleteUser = async (userId, token) => {
   return response.data;
 };
 
+// Update user frozen status
+const updateFrozenStatus = async (userId, isFrozen, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await axios.put('https://stdfckbackend.onrender.com/api/v1/admin/freeze' + `/${userId}`, { isFrozen }, config);
+ console.log(response.data);
+  return response.data;
+};
+
+
 const adminService = {
   loginAdmin,
   getPendingApprovals,
@@ -149,6 +162,7 @@ const adminService = {
   deleteUser,
   getAllUsers,
   getUserById,
+  updateFrozenStatus,
 };
 
 export default adminService; 

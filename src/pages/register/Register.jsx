@@ -29,8 +29,7 @@ function Register() {
     email: '',
     phoneNumber: '',
     password: '',
-    profileImage: null,
-    idCard: null
+    profileImage: null
   });
 
   useEffect(() => {
@@ -137,10 +136,6 @@ function Register() {
         throw new Error('Please upload a profile image');
       }
 
-      if (!formData.idCard) {
-        throw new Error('Please upload an ID card');
-      }
-
       setIsSubmitting(true);
 
       // Create FormData
@@ -148,14 +143,13 @@ function Register() {
       
       // Append all text fields
       Object.keys(formData).forEach(key => {
-        if (key !== 'profileImage' && key !== 'idCard' && formData[key] !== null && formData[key] !== '') {
-          formDataToSend.append(key, formData[key].trim()); // Trim strings
+        if (key !== 'profileImage' && formData[key] !== null && formData[key] !== '') {
+          formDataToSend.append(key, formData[key].trim());
         }
       });
 
-      // Append files with correct field names
+      // Append profile image
       formDataToSend.append('avatar', formData.profileImage);
-      formDataToSend.append('idCard', formData.idCard);
 
       const result = await dispatch(register(formDataToSend)).unwrap();
       
@@ -330,22 +324,6 @@ function Register() {
               {previewImage && (
                 <div className="image-preview">
                   <img src={previewImage} alt="Profile preview" />
-                </div>
-              )}
-            </div>
-            <div className="form-group">
-              <label htmlFor="idCard">ID Card:</label>
-              <input
-                id="idCard"
-                name="idCard"
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                required
-              />
-              {previewId && (
-                <div className="image-preview">
-                  <img src={previewId} alt="ID preview" />
                 </div>
               )}
             </div>

@@ -11,7 +11,7 @@ const ArrowIcon = () => (
 const EventItem = ({ event }) => (
   <div className="evt-item">
     <div className="evt-item__data">
-      <Link to={event.link} className="evt-item__data__date">
+      <Link to='#' className="evt-item__data__date">
         <span className="event-month">{event.month}</span>
         <span className="event-day">{event.day}</span>
       </Link>
@@ -21,13 +21,13 @@ const EventItem = ({ event }) => (
           By {event.author}
         </Link>
         
-        <Link to={event.link} className="event-title">
+        <Link to='#' className="event-title">
           <span>{event.title}</span>
         </Link>
 
         <p className="event-description">{event.description}</p>
         
-        <Link to={event.link} className="view--more">
+        <Link to='#' className="view--more">
           Read More <ArrowIcon />
         </Link>
       </div>
@@ -117,7 +117,7 @@ const Events = () => {
               <EventItem key={event.id} event={event} />
             ))}
             
-            <Link to="/events" className="view--more" data-aos="fade-in" data-aos-delay="250">
+            <Link to="#" className="view--more" data-aos="fade-in" data-aos-delay="250">
               View all <ArrowIcon />
             </Link>
           </div>

@@ -7,9 +7,10 @@ import {
 } from 'lucide-react';
 import { 
   getPendingApprovals, getAllTransactions, getTransactionStats,
-  getUnverifiedIds, approveUser, verifyUserId, creditUser, logout, verifyAccount, getAllUsers, getUserById, clearSelectedUser, deleteUser
+  getUnverifiedIds, approveUser, verifyUserId, creditUser, logout, verifyAccount, getAllUsers, getUserById, clearSelectedUser, deleteUser, updateFrozenStatus
 } from '../../store/admin/adminSlice';
 import "./adminDashboard.css";
+import { Switch } from '@headlessui/react';
 
 export default function AdminDashboard() {
   const dispatch = useDispatch();
@@ -171,6 +172,27 @@ export default function AdminDashboard() {
   const handlePrevPage = () => {
     if (currentPage > 1) {
       setCurrentPage(prev => prev - 1);
+    }
+  };
+
+  const handleFreezeToggle = async (userId, currentStatus) => {
+    try {
+      await dispatch(updateFrozenStatus({ 
+        userId, 
+        isFrozen: !currentStatus 
+      })).unwrap();
+      
+      setNotification({
+        show: true,
+        type: 'success',
+        message: `User account ${!currentStatus ? 'frozen' : 'unfrozen'} successfully`
+      });
+    } catch (error) {
+      setNotification({
+        show: true,
+        type: 'error',
+        message: error || 'Failed to update account status'
+      });
     }
   };
 
@@ -586,6 +608,7 @@ export default function AdminDashboard() {
                           <th>Account Number</th>
                           <th>Balance</th>
                           <th>Status</th>
+                          <th>Account Status</th>
                           <th>Actions</th>
                         </tr>
                       </thead>
@@ -611,6 +634,19 @@ export default function AdminDashboard() {
                               <span className={`status-badge ${user.isVerified ? 'success' : 'pending'}`}>
                                 {user.isVerified ? 'Verified' : 'Pending'}
                               </span>
+                            </td>
+                            <td>
+                              <div className="freeze-toggle">
+                                <button
+                                  onClick={() => handleFreezeToggle(user._id, user.isFrozen)}
+                                  className={`toggle-button ${!user.isFrozen ? 'active' : 'inactive'}`}
+                                >
+                                  <div className="toggle-slider"></div>
+                                </button>
+                                <span className={`status-text ${user.isFrozen ? 'text-red-600' : 'text-green-600'}`}>
+                                  {user.isFrozen ? 'Frozen' : 'Active'}
+                                </span>
+                              </div>
                             </td>
                             <td>
                               <div className="action-buttons">

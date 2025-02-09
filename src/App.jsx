@@ -21,6 +21,8 @@ import TermsConditions from './pages/policies/TermsConditions';
 import NotFound from './pages/NotFound';
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminRoute from './components/AdminRoute';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const location = useLocation();
@@ -47,6 +49,7 @@ function App() {
 
   return (
     <HelmetProvider>
+      <ToastContainer />
       {!shouldHideHeaderFooter && <Header />}
       <main>
         <Routes>

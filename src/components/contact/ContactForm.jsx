@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import './ContactForm.css';
+import { toast } from 'react-toastify';
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
@@ -8,27 +10,18 @@ const ContactForm = () => {
     subject: '',
     message: ''
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      // Replace with your API endpoint
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-      
-      if (response.ok) {
-        alert('Message sent successfully!');
-        setFormData({ name: '', email: '', subject: '', message: '' });
-      }
-    } catch (error) {
-      console.error('Error sending message:', error);
-      alert('Failed to send message. Please try again.');
-    }
+    setIsLoading(true);
+    
+    // Simulate API call delay
+    setTimeout(() => {
+      toast.success('Message sent successfully!');
+      setFormData({ name: '', email: '', subject: '', message: '' });
+      setIsLoading(false);
+    }, 1500);
   };
 
   const handleChange = (e) => {
@@ -86,8 +79,19 @@ const ContactForm = () => {
               required
             />
           </div>
-          <button type="submit" className="submit-btn">
-            Send Message
+          <button 
+            type="submit" 
+            className="submit-btn" 
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <div className="spinner-container">
+              <LoadingSpinner/>
+                <span>Sending...</span>
+              </div>
+            ) : (
+              'Send Message'
+            )}
           </button>
         </form>
       </div>

@@ -11,50 +11,23 @@ function Login() {
     email: '',
     password: ''
   });
-  const [notification, setNotification] = useState({ show: false, type: '', message: '' });
+  const [notification, setNotification] = useState({ 
+    show: false, 
+    type: '', 
+    message: '' 
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { user, isLoading, isError, isSuccess, message } = useSelector(
-    (state) => state.auth
-  );
+  const { user, isLoading } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (user) {
       navigate('/dashboard', { replace: true });
-      return;
     }
-
-    if (isError) {
-      setNotification({
-        show: true,
-        type: 'error',
-        message: message
-      });
-    }
-
-    if (isSuccess && user) {
-      setNotification({
-        show: true,
-        type: 'success',
-        message: 'Login successful! Redirecting to dashboard...'
-      });
-      
-      const timer = setTimeout(() => {
-        navigate('/dashboard', { replace: true });
-      }, 1500);
-
-      return () => clearTimeout(timer);
-    }
-
-    return () => {
-      if (notification.show) {
-        setNotification({ show: false, type: '', message: '' });
-      }
-    };
-  }, [user, isError, isSuccess, message, navigate]);
+  }, [user, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -76,7 +49,6 @@ function Login() {
           message: 'Login successful! Redirecting to dashboard...'
         });
         
-        // Navigate after a short delay
         setTimeout(() => {
           navigate('/dashboard', { replace: true });
         }, 1500);
@@ -85,7 +57,7 @@ function Login() {
       setNotification({
         show: true,
         type: 'error',
-        message: error.message
+        message: error.message || 'Login failed. Please check your credentials.'
       });
     } finally {
       setIsSubmitting(false);
@@ -131,7 +103,7 @@ function Login() {
     <div className='login-main'>
       <div className="login-overlay"></div>
       <div className="login-container">
-        {(isSubmitting || isLoading) && <LoadingSpinner />}
+        {isSubmitting && <LoadingSpinner />}
         <div className="login-header">
           <h1>Login</h1>
           <p className="highlight">Welcome back!</p>

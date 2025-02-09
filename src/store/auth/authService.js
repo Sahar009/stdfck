@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+// const API_URL = 'http://localhost:10000/api/v1/user/';
 const API_URL = 'https://stdfckbackend.onrender.com/api/v1/user/';
 
 // Get user from localStorage
@@ -17,7 +18,7 @@ const register = async (userData) => {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
-      timeout: 60000, // Increase timeout to 60 seconds
+      timeout: 60000,
       onUploadProgress: (progressEvent) => {
         const percentCompleted = Math.round(
           (progressEvent.loaded * 100) / progressEvent.total
@@ -26,7 +27,7 @@ const register = async (userData) => {
       }
     };
 
-    // Log the actual data being sent
+    // Log the actual data being sent (excluding sensitive data)
     console.log('FormData contents:');
     for (let pair of userData.entries()) {
       if (pair[0] !== 'password') {
@@ -34,7 +35,15 @@ const register = async (userData) => {
       }
     }
 
-    const response = await axios.post(API_URL + 'register', userData, config);
+    // Only append avatar, remove idCard
+    const formDataToSend = new FormData();
+    for (let [key, value] of userData.entries()) {
+      if (key !== 'idCard') {  // Skip idCard
+        formDataToSend.append(key, value);
+      }
+    }
+
+    const response = await axios.post(API_URL + 'register', formDataToSend, config);
 
     console.log('API Response:', response.data);
     return response.data;
@@ -47,16 +56,14 @@ const register = async (userData) => {
       statusText: error.response?.statusText,
     });
 
-    // Handle specific error cases
     if (error.code === 'ECONNABORTED') {
-      throw new Error('Upload taking too long. Please try with smaller images or check your connection.');
+      throw new Error('Upload taking too long. Please try with a smaller image or check your connection.');
     }
     
     if (!error.response) {
       throw new Error('Network error. Please check your connection and try again.');
     }
 
-    // Throw the actual error message from the server if available
     throw error.response?.data?.message || 
           error.message || 
           'Registration failed. Please try again.';
@@ -71,6 +78,7 @@ const login = async (userData) => {
     if (response.data.success) {
       // Store user data only if login was successful
       localStorage.setItem('user', JSON.stringify(response.data.data));
+      console.log(response.data.data);
       return response.data.data;
     } else {
       throw new Error(response.data.message);

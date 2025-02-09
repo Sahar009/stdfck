@@ -50,24 +50,24 @@ export default function Transfer() {
     if (isSuccess) {
       setTransferStatus({
         status: 'success',
-        // message: transferType === 'external' 
-        //   ? 'Your external transfer has been initiated. Please note that it may take 3-7 business days to complete the transfer to an external bank account.'
-        //   : 'Your transfer has been completed successfully.',
-        // subtitle: transferType === 'external' 
-        //   ? '3-7 Business Days Processing Time'
-        //   : null
         message: transferType === 'external' 
-        ? 'An Error Occured Your external transfer cannot be completed, kindly contact customer service'
-        : 'Your transfer is not completed',
-      subtitle: transferType === 'external' 
-        ? 'Your transfer is not completed'
-        : null
+          ? 'Your external transfer has been initiated. Please note that it may take 3-7 business days to complete the transfer to an external bank account.'
+          : 'Your transfer has been completed successfully.',
+        subtitle: transferType === 'external' 
+          ? '3-7 Business Days Processing Time'
+          : null
+      //   message: transferType === 'external' 
+      //   ? 'An Error Occured Your external transfer cannot be completed, kindly contact customer service'
+      //   : 'Your transfer is not completed',
+      // subtitle: transferType === 'external' 
+      //   ? 'Your transfer is not completed'
+      //   : null
       });
       setShowStatusModal(true);
     } else if (isError) {
       setTransferStatus({
         status: 'error',
-        message: message || 'An error occurred during the transfer.'
+        message: message || 'An error occurred during the transfer kindly contact customer care.'
       });
       setShowStatusModal(true);
     }
@@ -112,14 +112,6 @@ export default function Transfer() {
     }
   };
 
-  const calculateTransferFee = (amount) => {
-    const fee = amount * 0.002; // 0.002% transfer fee
-    return {
-      fee,
-      finalAmount: amount - fee // Deduct fee from transfer amount
-    };
-  };
-
   const handleAccountNumberChange = (e) => {
     const accountNumber = e.target.value;
     setTransferData({
@@ -161,7 +153,6 @@ export default function Transfer() {
     setError('');
 
     const amount = parseFloat(transferData.amount);
-    const { fee, finalAmount } = calculateTransferFee(amount);
 
     if (!amount || amount <= 0) {
       setError('Please enter a valid amount');
@@ -176,11 +167,10 @@ export default function Transfer() {
     if (transferType === 'internal') {
       dispatch(transferMoney({
         receiverAccountNumber: transferData.receiverAccountNumber,
-        amount: finalAmount,
+        amount: amount,
         description: transferData.description
       }));
     } else {
-      // For external transfers, show processing status immediately
       setTransferStatus({
         status: 'pending',
         message: 'An Error Occured Your external transfer be completed kindly contact customer service',
@@ -192,7 +182,7 @@ export default function Transfer() {
         bankName: transferData.bankName,
         accountNumber: transferData.receiverAccountNumber,
         accountName: transferData.accountName,
-        amount: finalAmount,
+        amount: amount,
         description: transferData.description
       }));
     }
@@ -387,25 +377,11 @@ export default function Transfer() {
           </div>
 
           <div className="transfer-summary">
-            <div className="summary-item">
-              <span>Transfer Amount</span>
-              <span className="amount">${transferData.amount || '0.00'}</span>
-            </div>
-            <div className="summary-item fee">
-              <span>Transfer Fee (0.002%)</span>
-              <span className="fee-amount">-${
-                transferData.amount ? 
-                calculateTransferFee(parseFloat(transferData.amount)).fee.toFixed(2) 
-                : '0.00'
-              }</span>
-            </div>
             <div className="summary-item total">
-              <span>Final Amount</span>
-              <span className="final-amount">${
-                transferData.amount ? 
-                calculateTransferFee(parseFloat(transferData.amount)).finalAmount.toFixed(2) 
-                : '0.00'
-              }</span>
+              <span>Transfer Amount</span>
+              <span className="final-amount">
+                ${transferData.amount ? parseFloat(transferData.amount).toFixed(2) : '0.00'}
+              </span>
             </div>
           </div>
 

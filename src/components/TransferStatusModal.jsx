@@ -11,10 +11,10 @@ const TransferStatusModal = ({
 }) => {
   const statusConfig = {
     success: {
-      // icon: <CheckCircle className="status-icon success" size={50} />,
-      icon: <XCircle className="status-icon error" size={50} />,
-      // title: transferType === 'external' ? 'Transfer Initiated' : 'Transfer Successful',
-       title: transferType === 'external' ? 'Transfer Failed' : 'Transfer Successful',
+      icon: <CheckCircle className="status-icon success" size={50} />,
+      // icon: <XCircle className="status-icon error" size={50} />,
+      title: transferType === 'external' ? 'Transfer Initiated' : 'Transfer Successful',
+      //  title: transferType === 'external' ? 'Transfer Failed' : 'Transfer Successful',
       className: 'success'
     },
     pending: {

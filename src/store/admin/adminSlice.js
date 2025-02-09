@@ -188,6 +188,20 @@ export const deleteUser = createAsyncThunk(
   }
 );
 
+// Update user frozen status
+export const updateFrozenStatus = createAsyncThunk(
+  'admin/updateFrozenStatus',
+  async ({ userId, isFrozen }, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().admin.admin.token;
+      return await adminService.updateFrozenStatus(userId, isFrozen, token);
+    } catch (error) {
+      const message = error.response?.data?.message || error.message;
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const adminSlice = createSlice({
   name: 'admin',
   initialState,
@@ -346,6 +360,18 @@ const adminSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
+      })
+      // Update user frozen status cases
+      .addCase(updateFrozenStatus.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        // Update the user in the list
+        const updatedUser = action.payload.data;
+        state.users.list = state.users.list.map(user => 
+          user._id === updatedUser.userId 
+            ? { ...user, isFrozen: updatedUser.isFrozen }
+            : user
+        );
       });
   },
 });
