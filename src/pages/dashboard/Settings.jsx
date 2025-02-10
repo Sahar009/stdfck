@@ -32,7 +32,7 @@ const Settings = () => {
 
   const [imagePreview, setImagePreview] = useState({
     avatar: null,
-    idCard: null
+   
   });
 
   useEffect(() => {
@@ -167,43 +167,6 @@ const Settings = () => {
                   </div>
                 </div>
                 <p className="image-help-text">Recommended: Square image, max 5MB</p>
-              </div>
-
-              <div className="image-section">
-                <h3>ID Card</h3>
-                <div className="image-container id-card">
-                  {user?.idCard?.url ? (
-                    <img 
-                      src={imagePreview.idCard || user.idCard.url} 
-                      alt="ID Card" 
-                      className="id-card-image"
-                    />
-                  ) : (
-                    <div className="image-placeholder">
-                      <Upload size={40} />
-                    </div>
-                  )}
-                  <div className="image-overlay">
-                    <label className="upload-button">
-                      <Upload size={20} />
-                      Update ID
-                      <input
-                        type="file"
-                        accept="image/*,.pdf"
-                        onChange={(e) => handleImageChange(e, 'idCard')}
-                        hidden
-                      />
-                    </label>
-                  </div>
-                </div>
-                <div className="verification-status">
-                  {user?.idCard?.verified ? (
-                    <span className="verified">✓ Verified</span>
-                  ) : (
-                    <span className="pending">Pending Verification</span>
-                  )}
-                </div>
-                <p className="image-help-text">Accepted formats: JPG, PNG, PDF. Max 10MB</p>
               </div>
             </div>
 

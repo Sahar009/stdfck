@@ -4,7 +4,7 @@ export default function About() {
   return (
     <div className="about-container">
       <header className="about-header">
-        <h1>About Unity Bank</h1>
+        <h1>About Unity Finance</h1>
         <p className="subtitle">Building Financial Futures Together</p>
       </header>
 

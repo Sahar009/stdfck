@@ -46,18 +46,20 @@ function Footer() {
           <div className="support-content">
             <div className="support-item">
               <p>Technical Issues</p>
-              <a href="mailto:technical@unityfinance.com">technical@unityfinance.com</a>
+              <a href="mailto:technical@unityfinance.online">technical@unityfinance.online</a>
             </div>
             <div className="support-item">
               <p>Any Issues</p>
-              <a href="mailto:support@unityfinance.com">support@unityfinance.com</a>
+
+              <a href="mailto:support@unityfinance.online">support@unityfinance.online</a>
             </div>
           </div>
         </div>
+
       </div>
 
       <div className="footer-bottom">
-        <p>© 2025 Unity </p>
+        <p>© 2025 Unity Finance</p>
         <div className="social-links">
           <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
             <i className="fab fa-facebook"></i>

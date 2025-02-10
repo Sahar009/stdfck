@@ -4,7 +4,7 @@ import './DashboardHeader.css';
 const DashboardHeader = ({ user }) => {
   return (
     <header className="header">
-      <h1 className="logo">UNITY</h1>
+      <h1 className="logo">UNITY FINANCE</h1>
 
       <div className="welcome-section">
         <span className="welcome-text">Welcome, {user?.firstName}</span>
