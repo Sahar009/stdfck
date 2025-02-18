@@ -12,6 +12,9 @@ const transferMoney = async (transferData, token) => {
   };
 
   const response = await axios.post(API_URL + 'transfer', transferData, config);
+  if (!response.data.success) {
+    throw new Error(response.data.message);
+  }
   return response.data;
 };
 
@@ -24,6 +27,9 @@ const externalTransfer = async (transferData, token) => {
   };
 
   const response = await axios.post(API_URL + 'external-transfer', transferData, config);
+  if (!response.data.success) {
+    throw new Error(response.data.message);
+  }
   return response.data;
 };
 

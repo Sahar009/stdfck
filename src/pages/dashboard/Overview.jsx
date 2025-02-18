@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getUserTransactions } from '../../store/transactions/transactionSlice';
-import { PieChart, Wallet, ArrowUpRight, ArrowDownRight, Clock } from 'lucide-react';
+import { PieChart, Wallet, ArrowUpRight, ArrowDownRight, Clock, Search, Filter, Building2, Eye, EyeOff } from 'lucide-react';
 import './Overview.css';
 
 // Approval Modal Component
@@ -20,6 +20,7 @@ const Overview = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const { transactions, stats, isLoading } = useSelector((state) => state.transactions);
+  const [showBalance, setShowBalance] = useState(true);
 
   useEffect(() => {
     if (user && user.token) {
@@ -41,10 +42,47 @@ const Overview = () => {
   };
 
   const getTransactionIcon = (type, isReceived) => {
-    if (type === 'admin-credit') return <PieChart className="transaction-icon admin" />;
-    return isReceived ? 
-      <ArrowDownRight className="transaction-icon received" /> : 
-      <ArrowUpRight className="transaction-icon sent" />;
+    switch(type) {
+      case 'admin-credit':
+        return <PieChart className="transaction-icon admin" />;
+      case 'external-transfer':
+        return <Building2 className="transaction-icon external" />;
+      default:
+        return isReceived ? 
+          <ArrowDownRight className="transaction-icon received" /> : 
+          <ArrowUpRight className="transaction-icon sent" />;
+    }
+  };
+
+  const getTransactionLabel = (transaction, isReceived) => {
+    switch(transaction.type) {
+      case 'admin-credit':
+        return 'Admin Credit';
+      case 'external-transfer':
+        return `External Transfer to ${transaction.externalBankDetails?.bankName || 'Bank'}`;
+      default:
+        return isReceived ? 'Money Received' : 'Money Sent';
+    }
+  };
+
+  const getTransactionParty = (transaction, isReceived) => {
+    if (transaction.type === 'external-transfer') {
+      return `To: ${transaction.externalBankDetails?.accountName || 'External Account'} (${transaction.externalBankDetails?.accountNumber || ''})`;
+    }
+    
+    return isReceived
+      ? transaction.sender 
+        ? `From: ${transaction.sender.firstName} ${transaction.sender.lastName}`
+        : 'From: System'
+      : `To: ${transaction.receiver.firstName} ${transaction.receiver.lastName}`;
+  };
+
+  const toggleBalanceVisibility = () => {
+    setShowBalance(!showBalance);
+  };
+
+  const formatHiddenBalance = () => {
+    return '••••••';
   };
 
   return (
@@ -52,11 +90,20 @@ const Overview = () => {
       {/* Balance Card */}
       <div className="balance-card">
         <div className="balance-header">
-          <h2>Current Balance</h2>
+          <h2>Available Balance</h2>
           <Wallet className="wallet-icon" />
         </div>
-        <div className="balance-amount">
-          {formatCurrency(user?.balance || 0)}
+        <div className="balance-amount-container">
+          <div className="balance-amount">
+            {showBalance ? formatCurrency(user?.balance || 0) : formatHiddenBalance()}
+          </div>
+          <button 
+            className="toggle-balance-btn"
+            onClick={toggleBalanceVisibility}
+            aria-label={showBalance ? "Hide Balance" : "Show Balance"}
+          >
+            {showBalance ? <EyeOff size={20} /> : <Eye size={20} />}
+          </button>
         </div>
         <div className="account-number">
           Account: {user?.accountNumber}
@@ -98,34 +145,38 @@ const Overview = () => {
           <div className="transactions-list">
             {recentTransactions.map((transaction) => {
               const isReceived = transaction.receiver._id === user._id;
-              const transactionType = transaction.type === 'admin-credit' 
-                ? 'Admin Credit'
-                : isReceived ? 'Received' : 'Sent';
-              
-              const otherParty = isReceived
-                ? (transaction.sender 
-                    ? `From: ${transaction.sender.firstName} ${transaction.sender.lastName}`
-                    : 'From: System')
-                : `To: ${transaction.receiver.firstName} ${transaction.receiver.lastName}`;
-
               return (
                 <div key={transaction._id} className="transaction-item">
                   {getTransactionIcon(transaction.type, isReceived)}
-                  <div className="transaction-details">
+                  
+                  <div className="transaction-info">
                     <div className="transaction-type">
-                      {transactionType}
+                      {getTransactionLabel(transaction, isReceived)}
                     </div>
                     <div className="transaction-party">
-                      {otherParty}
+                      {getTransactionParty(transaction, isReceived)}
                     </div>
                   </div>
-                  <div className="transaction-amount-container">
-                    <div className={`transaction-amount ${isReceived ? 'received' : 'sent'}`}>
-                      {isReceived ? '+' : '-'}{formatCurrency(transaction.amount)}
+
+                  <div className="transaction-details">
+                    <div className={`transaction-amount ${
+                      transaction.type === 'external-transfer' ? 'external' : 
+                      isReceived ? 'received' : 'sent'
+                    }`}>
+                      {transaction.type === 'external-transfer' ? '-' : 
+                        isReceived ? '+' : '-'}
+                      {formatCurrency(transaction.amount)}
                     </div>
                     <div className="transaction-date">
                       {new Date(transaction.timestamp).toLocaleDateString()}
                     </div>
+                  </div>
+
+                  <div className={`transaction-status ${transaction.status}`}>
+                    {transaction.status}
+                    {transaction.type === 'external-transfer' && transaction.status === 'pending' && (
+                      <span className="processing-info">3-7 business days</span>
+                    )}
                   </div>
                 </div>
               );

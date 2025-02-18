@@ -70,23 +70,18 @@ const register = async (userData) => {
   }
 };
 
-// Login user
-const login = async (userData) => {
+// Initiate login
+const initiateLogin = async (userData) => {
   try {
-    const response = await axios.post(API_URL + 'login', userData);
+    const response = await axios.post(API_URL + 'login/initiate', userData);
     
     if (response.data.success) {
-      // Store user data only if login was successful
-      localStorage.setItem('user', JSON.stringify(response.data.data));
-      console.log(response.data.data);
-      return response.data.data;
+      return response.data;
     } else {
       throw new Error(response.data.message);
     }
-    
   } catch (error) {
     if (error.response) {
-      // Handle specific error cases from backend
       if (error.response.data.message.includes('pending approval')) {
         throw new Error('Account pending approval. Please wait for admin confirmation.');
       }
@@ -96,6 +91,40 @@ const login = async (userData) => {
     } else {
       throw new Error(error.message || 'Error setting up request. Please try again.');
     }
+  }
+};
+
+// Verify OTP
+const verifyLoginOTP = async (verificationData) => {
+  try {
+    const response = await axios.post(API_URL + 'login/verify-otp', verificationData);
+    
+    if (response.data.success) {
+      localStorage.setItem('user', JSON.stringify(response.data.data));
+      return response.data.data;
+    } else {
+      throw new Error(response.data.message);
+    }
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'OTP verification failed');
+  }
+};
+
+// Resend OTP
+const resendLoginOTP = async (email) => {
+  try {
+    const response = await axios.post(API_URL + 'login/resend-otp', { email });
+    
+    if (response.data.success) {
+      return response.data;
+    } else {
+      throw new Error(response.data.message);
+    }
+  } catch (error) {
+    if (error.response?.status === 429) {
+      throw new Error(`${error.response.data.message}. Wait ${error.response.data.waitTime} seconds.`);
+    }
+    throw new Error(error.response?.data?.message || 'Failed to resend OTP');
   }
 };
 
@@ -135,7 +164,9 @@ const getUserProfile = async (token) => {
 
 const authService = {
   register,
-  login,
+  initiateLogin,
+  verifyLoginOTP,
+  resendLoginOTP,
   getUserProfile,
 };
 

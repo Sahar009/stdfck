@@ -43,6 +43,33 @@
   opacity: 0.8;
 }
 
+.balance-amount-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.toggle-balance-btn {
+  background: none;
+  border: none;
+  padding: 0.25rem;
+  cursor: pointer;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.toggle-balance-btn:hover {
+  color: #475569;
+}
+
+.toggle-balance-btn:focus {
+  outline: none;
+  color: #475569;
+}
+
 /* Stats Grid */
 .stats-grid {
   display: grid;
@@ -115,75 +142,108 @@
 .transaction-item {
   display: flex;
   align-items: center;
+  gap: 1rem;
   padding: 1rem;
-  border-radius: 0.5rem;
-  background: #f9fafb;
-  transition: all 0.2s ease;
+  border-bottom: 1px solid #e2e8f0;
 }
 
-.transaction-item:hover {
-  background: #f3f4f6;
-  transform: translateY(-1px);
+.transaction-item:last-child {
+  border-bottom: none;
 }
 
 .transaction-icon {
-  padding: 0.5rem;
+  width: 2rem;
+  height: 2rem;
+  padding: 0.4rem;
   border-radius: 50%;
-  background: #e5e7eb;
-  margin-right: 1rem;
-}
-
-.transaction-icon.sent {
-  color: #dc2626;
-  background: #fee2e2;
-}
-
-.transaction-icon.received {
-  color: #059669;
-  background: #dcfce7;
 }
 
 .transaction-icon.admin {
-  color: #2563eb;
-  background: #dbeafe;
+  background-color: #f0f9ff;
+  color: #0ea5e9;
 }
 
-.transaction-details {
+.transaction-icon.external {
+  background-color: #f5f3ff;
+  color: #8b5cf6;
+}
+
+.transaction-icon.received {
+  background-color: #f0fdf4;
+  color: #22c55e;
+}
+
+.transaction-icon.sent {
+  background-color: #fef2f2;
+  color: #ef4444;
+}
+
+.transaction-info {
   flex: 1;
 }
 
 .transaction-type {
   font-weight: 500;
-  color: #111827;
+  color: #1f2937;
 }
 
 .transaction-party {
   font-size: 0.875rem;
   color: #6b7280;
-  margin-top: 0.25rem;
 }
 
-.transaction-amount-container {
+.transaction-details {
   text-align: right;
 }
 
 .transaction-amount {
-  font-weight: 600;
-  font-size: 1rem;
-}
-
-.transaction-amount.sent {
-  color: #dc2626;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
 }
 
 .transaction-amount.received {
-  color: #059669;
+  color: #22c55e;
+}
+
+.transaction-amount.sent {
+  color: #ef4444;
+}
+
+.transaction-amount.external {
+  color: #8b5cf6;
 }
 
 .transaction-date {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.transaction-status {
+  font-size: 0.875rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  text-transform: capitalize;
+}
+
+.transaction-status.completed {
+  background-color: #f0fdf4;
+  color: #22c55e;
+}
+
+.transaction-status.pending {
+  background-color: #fef3c7;
+  color: #d97706;
+}
+
+.transaction-status.failed {
+  background-color: #fef2f2;
+  color: #ef4444;
+}
+
+.processing-info {
+  display: block;
   font-size: 0.75rem;
   color: #6b7280;
-  margin-top: 0.25rem;
 }
 
 .loading, .no-transactions {

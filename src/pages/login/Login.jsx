@@ -2,7 +2,7 @@ import './login.css';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { login, reset } from '../../store/auth/authSlice';
+import { login, reset, initiateLogin, verifyLoginOTP, resendLoginOTP } from '../../store/auth/authSlice';
 import { X, AlertCircle, CheckCircle2, AlertTriangle } from 'lucide-react';
 import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 
@@ -11,17 +11,20 @@ function Login() {
     email: '',
     password: ''
   });
+  const [otp, setOtp] = useState('');
+  const [showOtpInput, setShowOtpInput] = useState(false);
   const [notification, setNotification] = useState({ 
     show: false, 
     type: '', 
     message: '' 
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [countdown, setCountdown] = useState(0);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { user, isLoading } = useSelector((state) => state.auth);
+  const { user, pendingEmail, isLoading } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (user) {
@@ -29,20 +32,34 @@ function Login() {
     }
   }, [user, navigate]);
 
+  useEffect(() => {
+    if (countdown > 0) {
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [countdown]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
     try {
       setIsSubmitting(true);
-      const result = await dispatch(login(formData)).unwrap();
-      
-      if (result.isApproved === false) {
+      if (!showOtpInput) {
+        // Initial login attempt
+        const result = await dispatch(initiateLogin(formData)).unwrap();
+        setShowOtpInput(true);
         setNotification({
           show: true,
-          type: 'warning',
-          message: 'Your account is pending approval. Please wait for admin confirmation.'
+          type: 'success',
+          message: 'OTP sent to your email. Please check and verify.'
         });
       } else {
+        // OTP verification
+        const result = await dispatch(verifyLoginOTP({
+          email: pendingEmail,
+          otp
+        })).unwrap();
+        
         setNotification({
           show: true,
           type: 'success',
@@ -57,7 +74,7 @@ function Login() {
       setNotification({
         show: true,
         type: 'error',
-        message: error.message || 'Login failed. Please check your credentials.'
+        message: error.message || 'Login failed. Please try again.'
       });
     } finally {
       setIsSubmitting(false);
@@ -95,6 +112,26 @@ function Login() {
     }
   };
 
+  const handleResendOTP = async () => {
+    if (countdown > 0) return;
+    
+    try {
+      await dispatch(resendLoginOTP(pendingEmail)).unwrap();
+      setCountdown(45); // Start 45s countdown
+      setNotification({
+        show: true,
+        type: 'success',
+        message: 'New OTP sent to your email'
+      });
+    } catch (error) {
+      setNotification({
+        show: true,
+        type: 'error',
+        message: error.message
+      });
+    }
+  };
+
   if (isLoading) {
     return <LoadingSpinner />;
   }
@@ -109,55 +146,114 @@ function Login() {
           <p className="highlight">Welcome back!</p>
         </div>
         <form onSubmit={handleSubmit} className="login-form">
-          <div className="form-group">
-            <label htmlFor="email">Email:</label>
-            <input
-              id="email"
-              type="email"
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              required
-            />
-          </div>
+          {!showOtpInput ? (
+            <>
+              <div className="form-group">
+                <label htmlFor="email">Email:</label>
+                <input
+                  id="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  required
+                />
+              </div>
 
-          <div className="form-group">
-            <label htmlFor="password">Password:</label>
-            <input
-              id="password"
-              type="password"
-              value={formData.password}
-              readOnly
-              required
-            />
-          </div>
+              <div className="form-group">
+                <label htmlFor="password">Password:</label>
+                <input
+                  id="password"
+                  type="password"
+                  value={formData.password}
+                  readOnly
+                  required
+                />
+              </div>
 
-          <div className="keypad">
-            <button type="button" onClick={(e) => handleNumberClick(e, '1')}>1</button>
-            <button type="button" onClick={(e) => handleNumberClick(e, '0')}>0</button>
-            <button type="button" onClick={(e) => handleNumberClick(e, '4')}>4</button>
-            <button type="button" className="clear" onClick={handleClear}>CLR</button>
-            <button type="button" onClick={(e) => handleNumberClick(e, '3')}>3</button>
-            <button type="button" onClick={(e) => handleNumberClick(e, '6')}>6</button>
-            <button type="button" onClick={(e) => handleNumberClick(e, '5')}>5</button>
-            <button type="button" className="delete" onClick={handleDelete}>DEL</button>
-            <button type="button" onClick={(e) => handleNumberClick(e, '8')}>8</button>
-            <button type="button" onClick={(e) => handleNumberClick(e, '2')}>2</button>
-            <button type="button" onClick={(e) => handleNumberClick(e, '9')}>9</button>
-            <button type="button" onClick={(e) => handleNumberClick(e, '7')}>7</button>
-          </div>
-
+              <div className="keypad">
+                <button type="button" onClick={(e) => handleNumberClick(e, '1')}>1</button>
+                <button type="button" onClick={(e) => handleNumberClick(e, '0')}>0</button>
+                <button type="button" onClick={(e) => handleNumberClick(e, '4')}>4</button>
+                <button type="button" className="clear" onClick={handleClear}>CLR</button>
+                <button type="button" onClick={(e) => handleNumberClick(e, '3')}>3</button>
+                <button type="button" onClick={(e) => handleNumberClick(e, '6')}>6</button>
+                <button type="button" onClick={(e) => handleNumberClick(e, '5')}>5</button>
+                <button type="button" className="delete" onClick={handleDelete}>DEL</button>
+                <button type="button" onClick={(e) => handleNumberClick(e, '8')}>8</button>
+                <button type="button" onClick={(e) => handleNumberClick(e, '2')}>2</button>
+                <button type="button" onClick={(e) => handleNumberClick(e, '9')}>9</button>
+                <button type="button" onClick={(e) => handleNumberClick(e, '7')}>7</button>
+              </div>
+            </>
+          ) : (
+            <div className="form-group">
+              <label htmlFor="otp">Enter OTP sent to your email:</label>
+              <div className="otp-input-group">
+                {[...Array(6)].map((_, index) => (
+                  <input
+                    key={index}
+                    type="text"
+                    maxLength="1"
+                    pattern="\d"
+                    value={otp[index] || ''}
+                    onChange={(e) => {
+                      const newOtp = otp.split('');
+                      newOtp[index] = e.target.value;
+                      setOtp(newOtp.join(''));
+                      
+                      // Auto-focus next input
+                      if (e.target.value && index < 5) {
+                        const nextInput = e.target.nextElementSibling;
+                        if (nextInput) {
+                          nextInput.focus();
+                        }
+                      }
+                    }}
+                    onKeyDown={(e) => {
+                      // Handle backspace
+                      if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                        const prevInput = e.target.previousElementSibling;
+                        if (prevInput) {
+                          prevInput.focus();
+                        }
+                      }
+                    }}
+                    onPaste={(e) => {
+                      e.preventDefault();
+                      const pastedData = e.clipboardData.getData('text').slice(0, 6);
+                      if (/^\d+$/.test(pastedData)) {
+                        setOtp(pastedData);
+                      }
+                    }}
+                    inputMode="numeric"
+                    required
+                  />
+                ))}
+              </div>
+              <div className="resend-otp">
+                <button 
+                  type="button"
+                  onClick={handleResendOTP}
+                  disabled={countdown > 0}
+                  className="resend-button"
+                >
+                  {countdown > 0 ? `Resend OTP in ${countdown}s` : 'Resend OTP'}
+                </button>
+              </div>
+            </div>
+          )}
+          
           <button 
             type="submit"
             className="login-button"
             disabled={isSubmitting}
           >
-            {isSubmitting ? 'Loading...' : 'Login'}
+            {isSubmitting ? 'Loading...' : showOtpInput ? 'Verify OTP' : 'Login'}
           </button>
 
           <div className="links">
             <div className="help-links">
               <a href="/forgot-password">Forgot your password?</a>
-              <a href="/forgot-secret">Forgot your secret question?</a>
             </div>
           </div>
         </form>

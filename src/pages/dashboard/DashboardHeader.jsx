@@ -1,10 +1,11 @@
 import { Bell } from "lucide-react";
 import './DashboardHeader.css';
+import { Link } from "react-router-dom";
 
 const DashboardHeader = ({ user }) => {
   return (
     <header className="header">
-      <h1 className="logo">UNITY FINANCE</h1>
+     <Link to="/"> <h1 className="logo">UNITY FINANCE</h1></Link>
 
       <div className="welcome-section">
         <span className="welcome-text">Welcome, {user?.firstName}</span>

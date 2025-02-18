@@ -10,7 +10,8 @@ const initialState = {
   isError: false,
   isSuccess: false,
   isLoading: false,
-  message: ''
+  message: '',
+  pendingEmail: null
 };
 
 // Register user
@@ -81,6 +82,54 @@ export const logout = createAsyncThunk('auth/logout', async () => {
   // Remove user from localStorage
   localStorage.removeItem('user');
 });
+
+// Initiate Login
+export const initiateLogin = createAsyncThunk(
+  'auth/initiateLogin',
+  async (userData, thunkAPI) => {
+    try {
+      return await authService.initiateLogin(userData);
+    } catch (error) {
+      const message = 
+        (error.response?.data?.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+// Verify OTP
+export const verifyLoginOTP = createAsyncThunk(
+  'auth/verifyOTP',
+  async (verificationData, thunkAPI) => {
+    try {
+      return await authService.verifyLoginOTP(verificationData);
+    } catch (error) {
+      const message = 
+        (error.response?.data?.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+// Resend OTP
+export const resendLoginOTP = createAsyncThunk(
+  'auth/resendOTP',
+  async (email, thunkAPI) => {
+    try {
+      return await authService.resendLoginOTP(email);
+    } catch (error) {
+      const message = 
+        (error.response?.data?.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
 
 export const authSlice = createSlice({
   name: 'auth',
@@ -163,6 +212,51 @@ export const authSlice = createSlice({
         state.isSuccess = false;
         state.isError = false;
         state.message = '';
+      })
+      .addCase(initiateLogin.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.message = '';
+      })
+      .addCase(initiateLogin.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.pendingEmail = action.payload.data.email;
+      })
+      .addCase(initiateLogin.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(verifyLoginOTP.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.message = '';
+      })
+      .addCase(verifyLoginOTP.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.user = action.payload;
+        state.pendingEmail = null;
+      })
+      .addCase(verifyLoginOTP.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(resendLoginOTP.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.message = '';
+      })
+      .addCase(resendLoginOTP.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+      })
+      .addCase(resendLoginOTP.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
       });
   },
 });

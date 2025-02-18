@@ -165,7 +165,9 @@ const Transactions = () => {
                     transaction.type === 'external-transfer' ? 'external' : 
                     isReceived ? 'received' : 'sent'
                   }`}>
-                    {isReceived ? '+' : '-'}{formatCurrency(transaction.amount)}
+                    {transaction.type === 'external-transfer' ? '-' : 
+                      isReceived ? '+' : '-'}
+                    {formatCurrency(transaction.amount)}
                   </div>
                   <div className="transaction-date">
                     {new Date(transaction.timestamp).toLocaleDateString()}

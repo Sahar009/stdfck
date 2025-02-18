@@ -15,7 +15,8 @@ export const transferMoney = createAsyncThunk(
   async (transferData, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;
-      return await transferService.transferMoney(transferData, token);
+      const response = await transferService.transferMoney(transferData, token);
+      return response;
     } catch (error) {
       const message = error.response?.data?.message || error.message;
       return thunkAPI.rejectWithValue(message);
@@ -29,7 +30,8 @@ export const externalTransfer = createAsyncThunk(
   async (transferData, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;
-      return await transferService.externalTransfer(transferData, token);
+      const response = await transferService.externalTransfer(transferData, token);
+      return response;
     } catch (error) {
       const message = error.response?.data?.message || error.message;
       return thunkAPI.rejectWithValue(message);
