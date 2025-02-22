@@ -23,6 +23,7 @@ import AdminLogin from './pages/admin/AdminLogin';
 import AdminRoute from './components/AdminRoute';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import AuthCheck from './components/AuthCheck';
 
 function App() {
   const location = useLocation();
@@ -49,6 +50,7 @@ function App() {
 
   return (
     <HelmetProvider>
+       <AuthCheck/>
       <ToastContainer />
       {!shouldHideHeaderFooter && <Header />}
       <main>

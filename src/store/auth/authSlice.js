@@ -62,17 +62,13 @@ export const getUserProfile = createAsyncThunk(
         throw new Error('No token found');
       }
 
-      const response = await authService.getUserProfile(token);
-      return response;
+      return await authService.getUserProfile(token);
     } catch (error) {
       console.error('GetUserProfile error:', error);
-      const message = 
-        (error.response && 
-          error.response.data && 
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
+      // Return the exact error message from the backend
+      return thunkAPI.rejectWithValue(
+        error.message || 'Failed to fetch profile'
+      );
     }
   }
 );
@@ -90,11 +86,10 @@ export const initiateLogin = createAsyncThunk(
     try {
       return await authService.initiateLogin(userData);
     } catch (error) {
-      const message = 
-        (error.response?.data?.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
+      // Return the exact error message from the backend
+      return thunkAPI.rejectWithValue(
+        error.message || 'Login failed'
+      );
     }
   }
 );
@@ -199,10 +194,10 @@ export const authSlice = createSlice({
       .addCase(getUserProfile.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
+        // Use the exact error message
         state.message = action.payload;
-        // Don't clear user data on profile fetch failure
-        // Only clear if specifically unauthorized
-        if (action.payload === 'Not authorized') {
+        if (action.payload === 'Not authorized' || 
+            action.payload === 'jwt expired') {
           state.user = null;
         }
       })
@@ -226,6 +221,7 @@ export const authSlice = createSlice({
       .addCase(initiateLogin.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
+        // Use the exact error message
         state.message = action.payload;
       })
       .addCase(verifyLoginOTP.pending, (state) => {

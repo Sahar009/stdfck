@@ -74,23 +74,13 @@ const register = async (userData) => {
 const initiateLogin = async (userData) => {
   try {
     const response = await axios.post(API_URL + 'login/initiate', userData);
-    
-    if (response.data.success) {
-      return response.data;
-    } else {
-      throw new Error(response.data.message);
-    }
+    return response.data;
   } catch (error) {
-    if (error.response) {
-      if (error.response.data.message.includes('pending approval')) {
-        throw new Error('Account pending approval. Please wait for admin confirmation.');
-      }
-      throw new Error(error.response.data.message || 'Invalid credentials');
-    } else if (error.request) {
-      throw new Error('No response from server. Please try again later.');
-    } else {
-      throw new Error(error.message || 'Error setting up request. Please try again.');
-    }
+    // Directly throw the backend error response
+    throw error.response?.data || {
+      success: false,
+      message: error.message || 'Login failed'
+    };
   }
 };
 
@@ -137,17 +127,14 @@ const getUserProfile = async (token) => {
       },
     };
     
-
     const response = await axios.get(API_URL + 'profile', config);
   
-    
     if (response.data.success) {
-      // Update stored user data while preserving the token
       const currentUser = JSON.parse(localStorage.getItem('user'));
       const updatedUser = {
         ...currentUser,
         ...response.data.data,
-        token: currentUser.token // Preserve the token
+        token: currentUser.token
       };
       localStorage.setItem('user', JSON.stringify(updatedUser));
     }
@@ -158,7 +145,11 @@ const getUserProfile = async (token) => {
     if (error.response?.status === 401) {
       localStorage.removeItem('user');
     }
-    throw error;
+    // Return the exact error message from the backend
+    throw error.response?.data || {
+      success: false,
+      message: error.message || 'An error occurred while fetching profile'
+    };
   }
 };
 

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate, Routes, Route } from 'react-router-dom';
-import { getUserProfile } from '../../store/auth/authSlice';
+import { getUserProfile, logout } from '../../store/auth/authSlice';
 import { Avatar, AvatarFallback, AvatarImage } from "../../components/ui/avatar";
 import { Badge } from "../../components/ui/badge";
 import { Bell } from "lucide-react";
@@ -31,7 +31,7 @@ const ApprovalModal = () => (
 export default function Dashboard() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { user, isLoading } = useSelector((state) => state.auth);
+  const { user, isLoading, isError, message } = useSelector((state) => state.auth);
   const { transactions, stats, isLoading: transactionsLoading } = useSelector(
     (state) => state.transactions
   );
@@ -42,6 +42,7 @@ export default function Dashboard() {
       try {
         // Check if user exists and has token
         if (!user || !user.token) {
+          dispatch(logout());
           navigate('/login');
           return;
         }
@@ -50,7 +51,11 @@ export default function Dashboard() {
         setProfileLoaded(true);
       } catch (error) {
         console.error('Profile fetch error:', error);
-        if (error?.response?.status === 401) {
+        // Check for specific auth errors
+        if (error === 'Token  expired' || 
+            error === 'Not authorized' || 
+            error?.response?.status === 401) {
+          dispatch(logout());
           navigate('/login');
         }
       }
@@ -60,6 +65,16 @@ export default function Dashboard() {
       loadProfile();
     }
   }, [user, navigate, dispatch, profileLoaded]);
+
+  // Add error effect to handle auth errors
+  useEffect(() => {
+    if (isError) {
+      if (message === 'Token expired' || message === 'Not authorized') {
+        dispatch(logout());
+        navigate('/login');
+      }
+    }
+  }, [isError, message, dispatch, navigate]);
 
   useEffect(() => {
     if (user && user.token) {
