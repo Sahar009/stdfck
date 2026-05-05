@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://stdfckbackend.onrender.com/api/v1/user/';
+const API_URL = 'https://stdfckbackend-zr1u.onrender.com/api/v1/user/';
 
 const getUserTransactions = async (token, params = {}) => {
   const config = {

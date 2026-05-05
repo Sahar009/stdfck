@@ -46,12 +46,12 @@ function Footer() {
           <div className="support-content">
             <div className="support-item">
               <p>Technical Issues</p>
-              <a href="mailto:technical@unityfinance.online">technical@unityfinance.online</a>
+              <a href="mailto:technical@unityfinance.finance">technical@unityfinance.finance</a>
             </div>
             <div className="support-item">
               <p>Any Issues</p>
 
-              <a href="mailto:support@unityfinance.online">support@unityfinance.online</a>
+              <a href="mailto:support@unityfinance.finance">support@unityfinance.finance</a>
             </div>
           </div>
         </div>

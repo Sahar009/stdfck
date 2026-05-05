@@ -46,7 +46,7 @@ export default function Contact() {
                 <span className="icon">✉️</span>
                 <div>
                   <h4>Email</h4>
-                  <p>support@unityfinance.online</p>
+                  <p>support@unityfinance.finance</p>
                 </div>
               </div>
             </div>
