@@ -74,7 +74,7 @@ function Login() {
       setNotification({
         show: true,
         type: 'error',
-        message: error.message || 'Login failed. Please try again.'
+        message: error.message || 'Login failed'
       });
     } finally {
       setIsSubmitting(false);
