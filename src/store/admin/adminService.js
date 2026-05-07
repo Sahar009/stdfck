@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://backend.unityfinance.finance/api/v1/admin/';
+const API_URL = 'https://newbackend.unityfinance.finance/api/v1/admin/';
 
 // Login admin
 const loginAdmin = async (adminData) => {
@@ -98,7 +98,7 @@ const verifyAccount = async (accountNumber, token) => {
       Authorization: `Bearer ${token}`,
     },
   };
-  const response = await axios.get(`https://backend.unityfinance.finance/api/v1/user/verify-account/${accountNumber}`, config);
+  const response = await axios.get(`https://newbackend.unityfinance.finance/api/v1/user/verify-account/${accountNumber}`, config);
   return response.data;
 };
 
@@ -143,7 +143,7 @@ const updateFrozenStatus = async (userId, isFrozen, token) => {
       Authorization: `Bearer ${token}`,
     },
   };
-  const response = await axios.put('https://backend.unityfinance.finance/api/v1/admin/freeze' + `/${userId}`, { isFrozen }, config);
+  const response = await axios.put('https://newbackend.unityfinance.finance/api/v1/admin/freeze' + `/${userId}`, { isFrozen }, config);
  console.log(response.data);
   return response.data;
 };

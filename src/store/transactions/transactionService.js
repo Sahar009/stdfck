@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://backend.unityfinance.finance/api/v1/user/';
+const API_URL = 'https://newbackend.unityfinance.finance/api/v1/user/';
 
 const getUserTransactions = async (token, params = {}) => {
   const config = {
