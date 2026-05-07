@@ -18,6 +18,9 @@ import Contact from './pages/contact/Contact';
 import PrivacyPolicy from './pages/policies/PrivacyPolicy';
 import AntiLaundering from './pages/policies/AntiLaundering';
 import TermsConditions from './pages/policies/TermsConditions';
+import Coverage from './pages/coverage/Coverage';
+import Benefits from './pages/benefits/Benefits';
+import Methods from './pages/methods/Methods';
 import NotFound from './pages/NotFound';
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminRoute from './components/AdminRoute';
@@ -66,6 +69,9 @@ function App() {
           <Route path="/about" element={<About/>} />
           <Route path="/business" element={<Business/>} />
           <Route path="/contact" element={<Contact/>} />
+          <Route path="/coverage" element={<Coverage/>} />
+          <Route path="/benefits" element={<Benefits/>} />
+          <Route path="/methods" element={<Methods/>} />
           <Route path='/private-policy' element={<PrivacyPolicy/>} />
           <Route path='/terms-and-conditions' element={<TermsConditions/>} />
           <Route path='/anti-laundring' element={<AntiLaundering/>} />

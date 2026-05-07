@@ -1,0 +1,211 @@
+.coverage-main {
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.coverage-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  z-index: -1;
+}
+
+.coverage-container {
+  max-width: 1200px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  backdrop-filter: blur(10px);
+}
+
+.coverage-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #4dbf14;
+  text-decoration: none;
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+}
+
+.back-link:hover {
+  transform: translateX(-5px);
+}
+
+.logo-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.coverage-header h1 {
+  font-size: 2.5rem;
+  color: #333;
+  margin: 0;
+  font-weight: 700;
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  color: #666;
+  margin: 0;
+}
+
+.coverage-content {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
+
+.coverage-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  margin-bottom: 50px;
+}
+
+.coverage-card {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.coverage-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.coverage-card svg {
+  margin-bottom: 20px;
+}
+
+.coverage-card h3 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.coverage-card p {
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.coverage-card ul {
+  list-style: none;
+  padding: 0;
+  text-align: left;
+}
+
+.coverage-card li {
+  padding: 8px 0;
+  color: #555;
+  position: relative;
+  padding-left: 25px;
+}
+
+.coverage-card li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #4dbf14;
+  font-weight: bold;
+}
+
+.coverage-regions {
+  text-align: center;
+}
+
+.coverage-regions h2 {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 30px;
+  font-weight: 600;
+}
+
+.regions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+}
+
+.region-item {
+  background: linear-gradient(135deg, #4dbf14 0%, #3da312 100%);
+  color: white;
+  padding: 25px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.region-item h4 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.region-item p {
+  margin: 0;
+  opacity: 0.9;
+}
+
+.coverage-footer {
+  text-align: center;
+  margin-top: 40px;
+  padding-top: 30px;
+  border-top: 1px solid #eee;
+}
+
+.coverage-footer p {
+  color: #666;
+  font-size: 1rem;
+}
+
+.coverage-footer a {
+  color: #4dbf14;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.coverage-footer a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .coverage-container {
+    padding: 20px;
+    margin: 10px;
+  }
+  
+  .coverage-header h1 {
+    font-size: 2rem;
+  }
+  
+  .coverage-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .regions-grid {
+    grid-template-columns: 1fr;
+  }
+}

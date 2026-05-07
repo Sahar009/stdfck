@@ -18,9 +18,9 @@ function Footer() {
         <div className="footer-column">
           <h3>Product</h3>
           <ul>
-            <li><a href="/coverage">Coverage</a></li>
-            <li><a href="/benefits">Benefits</a></li>
-            <li><a href="/methods">Methods</a></li>
+            <li><Link to="/coverage">Coverage</Link></li>
+            <li><Link to="/benefits">Benefits</Link></li>
+            <li><Link to="/methods">Methods</Link></li>
           </ul>
         </div>
 
@@ -28,16 +28,16 @@ function Footer() {
           <h3>Company</h3>
           <ul>
           
-            <li><Link href="/contact">Contact us</Link></li>
+            <li><Link to="/contact">Contact us</Link></li>
           </ul>
         </div>
 
         <div className="footer-column">
           <h3>Legal</h3>
           <ul>
-            <li><Link href="/privacy-policy">Privacy policy</Link></li>
-            <li><Link href="/terms-and-conditions">Terms and conditions</Link></li>
-            <li><Link href="/anti-laundring">Anti Money Laundering policy</Link></li>
+            <li><Link to="/private-policy">Privacy policy</Link></li>
+            <li><Link to="/terms-and-conditions">Terms and conditions</Link></li>
+            <li><Link to="/anti-laundring">Anti Money Laundering policy</Link></li>
           </ul>
         </div>
 

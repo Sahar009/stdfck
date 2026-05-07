@@ -87,9 +87,11 @@ export const initiateLogin = createAsyncThunk(
       return await authService.initiateLogin(userData);
     } catch (error) {
       // Return the exact error message from the backend
-      return thunkAPI.rejectWithValue(
-        error.message || 'Login failed'
-      );
+      const message = 
+        (error.response?.data?.message) ||
+        error.message ||
+        'Login failed';
+      return thunkAPI.rejectWithValue(message);
     }
   }
 );

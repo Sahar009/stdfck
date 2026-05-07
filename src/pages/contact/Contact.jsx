@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import "./contact.css";
 import ContactForm from "../../components/contact/ContactForm";
+import { MapPin, Mail } from 'lucide-react';
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -29,21 +30,15 @@ export default function Contact() {
             <h3>Get in Touch</h3>
             <div className="contact-details">
               <div className="contact-item">
-                <span className="icon">📍</span>
+                <MapPin size={20} color='#4dbf14' className="icon" />
                 <div>
                   <h4>Address</h4>
                   <p>San Francisco, California, United States</p>
                 </div>
               </div>
+             
               <div className="contact-item">
-                <span className="icon">📞</span>
-                <div>
-                  <h4>Phone</h4>
-                  <p>+1 123 456 7890</p>
-                </div>
-              </div>
-              <div className="contact-item">
-                <span className="icon">✉️</span>
+                <Mail size={20} color='#4dbf14' className="icon" />
                 <div>
                   <h4>Email</h4>
                   <p>support@unityfinance.finance</p>
