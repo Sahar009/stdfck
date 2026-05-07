@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // const API_URL = 'http://localhost:10000/api/v1/user/';
-const API_URL = 'https://stdfckbackend-zr1u.onrender.com/api/v1/user/';
+const API_URL = 'https://backend.unityfinance.finance/api/v1/user/';
 
 // Internal Transfer
 const transferMoney = async (transferData, token) => {
